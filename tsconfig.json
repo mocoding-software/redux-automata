@@ -1,0 +1,24 @@
+{
+	"compilerOptions": {
+		"experimentalDecorators": true,		
+		"module": "commonjs",
+		"target": "es5",
+		"noImplicitAny": true,		
+		"moduleResolution": "node",
+		"emitDecoratorMetadata": true,
+		"sourceMap": false,
+		"declaration": true,
+		"outDir": "typings",
+		"baseUrl": "./src",
+		"removeComments": true,
+		"types": [
+			"node", "es6-shim"
+		]
+	},
+	"files": [
+		"src/index.ts"
+	],
+	"exclude": [
+		"node_modules"
+	]
+}
