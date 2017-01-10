@@ -9,7 +9,7 @@ module.exports = {
     entry: [
         "react-hot-loader/patch",
         "webpack-dev-server/client?http://localhost:3000",
-        "./fetch/index.tsx",
+        "./basic/index.tsx",
     ],
     output: {
         path: "/",

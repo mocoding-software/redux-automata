@@ -1,5 +1,5 @@
 import * as Redux from "redux";
-import { Automata, IAction, StateFunction, ActionFunction } from 'redux-automata';
+import { Automata } from 'redux-automata';
 
 export interface IResponseState {
     isFetching?: boolean;
@@ -23,8 +23,8 @@ const automata = new Automata<IResponseState>("FetchAutomata");
 //states
 const Idle = automata.State("Idle", () => ({}));
 const Fetching = automata.State("Fetching", () => ({ isFetching: true }));
-const Fetched = automata.State<GithubResposne>("Fetched", (data) => ({ data: data }));
-const FetchingFailed = automata.State<string>("Fetching Calendars Failed", (error) => ({ error }));
+const Fetched = automata.State<GithubResposne>("Fetched", (state, data) => ({ data: data }));
+const FetchingFailed = automata.State<string>("Fetching Calendars Failed", (state, error) => ({ error }));
 
 //actions
 const Fetch = automata.Action('Fetch');

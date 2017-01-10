@@ -45,7 +45,7 @@ class View extends React.Component<IViewProps, {}> {
                         <h1>Redux Automata - Fetch Example</h1>
                         <p>This example shows fetching remote data from server. We are fetching data from GitHub.</p>
                         {body}
-                        <p>This button stays enabled all the time. So nothing prevents you from clicking on it several times. But still nothing will happend.</p>
+                        <p>This button stays enabled all the time. So nothing prevents you from clicking on it several times. But since Refresh is not availible in Fetching state - nothing happens.</p>
                         <Button bsStyle="primary" onClick={this.props.refresh}>Refresh</Button>
                         <br />
                         <p>This button is disabled depending on availability of specific actions on current state.</p>

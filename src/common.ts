@@ -37,7 +37,7 @@ export interface ActionFunction<TAction> {
  */
 export interface StateFunction<TState, TAction> {
     stateName?: string,
-    (arg: TAction, state: TState): TState;
+    (state: TState, arg: TAction): TState;
 }
 
 export interface Transition<TAction> {

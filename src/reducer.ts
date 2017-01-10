@@ -6,7 +6,7 @@ export function automataReducer<TState>(automata: IGraphObject<TState>): Redux.R
     const nodes = automata.GetGraph();
     var currentNode = nodes.find(_ => _.stateName ==  automata.current.__sm_state);
     if (automata.current === undefined)
-        throw new Error("No initial state specified. Use StartWith() method to specify initial state.")
+        throw new Error("No initial state specified. Use BeginWith() method to specify initial state.")
     automata.current = Object.assign(automata.current, {
         canInvoke: <TAction>(action: ActionFunction<TAction>) => currentNode.actions.findIndex(_=>_.actionType == action.actionType) > -1
     }); 
