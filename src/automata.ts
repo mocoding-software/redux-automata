@@ -1,4 +1,6 @@
 import { StateBuilder } from './builders';
+import { ActionFunction, IAction } from './common';
+
 import {
     IStateMachineOptions,
     StateFunction,
@@ -14,6 +16,14 @@ export class Automata<TState> implements IStateMachineOptions<TState>, IGraphObj
     current: IAutomataState<TState>;
     private builders: StateBuilder<TState>[] = [];
 
+    /**
+     *
+     */
+    constructor(protected automataName: string) {
+        
+        
+    }
+
     In(state: StateFunction<TState, any>): IStateOptions<TState> {
         var builder = this.builders.find(_ => _.state.stateName === state.stateName)
         if (!builder)
@@ -27,7 +37,7 @@ export class Automata<TState> implements IStateMachineOptions<TState>, IGraphObj
         if (!builder)
             throw new Error("State should be previously defined using this.state(...) method.");
 
-        this.current = Object.assign(state({}), { 
+        this.current = Object.assign(state({},{} as TState), { 
             __sm_state: state.stateName,
             canInvoke: () => false
         });
@@ -39,14 +49,9 @@ export class Automata<TState> implements IStateMachineOptions<TState>, IGraphObj
         //add hierarchy here?
 
         return nodes;
-    }
+    }    
 
-    protected mergeState(state: TState): TState {
-        let nextState: TState = Object.assign({}, this.current, state);
-        return nextState;
-    }
-
-    protected state<TAction>(name: string, func: StateFunction<TState, TAction>): StateFunction<TState, TAction> {
+    public State<TAction>(name: string, func: StateFunction<TState, TAction>): StateFunction<TState, TAction> {
         var duplicate = this.builders.find(_ => _.state.stateName === name)
         if (duplicate)
             throw new Error("State with the same name already exist: " + name);
@@ -54,5 +59,26 @@ export class Automata<TState> implements IStateMachineOptions<TState>, IGraphObj
         var builder = new StateBuilder(func, this);
         this.builders.push(builder);
         return func;
+    }
+
+    public Action<TActionPayload>(type: string) {
+        var type = this.automataName + "/" + type;
+
+        var func: ActionFunction<TActionPayload> = (payload: TActionPayload) => {
+            let action: IAction<TActionPayload> = {
+                __sm__: this.automataName,
+                type: type,
+                payload: payload
+            };
+            return action;
+        }
+
+        func.actionType = type;
+        return func;
+    }
+
+    protected mergeState(state: TState): TState {
+        let nextState: TState = Object.assign({}, this.current, state);
+        return nextState;
     }
 }

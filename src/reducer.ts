@@ -4,6 +4,12 @@ import { IGraphObject, IAutomataState, IAction, ActionFunction } from './common'
 export function automataReducer<TState>(automata: IGraphObject<TState>): Redux.Reducer<IAutomataState<TState>> {
 
     const nodes = automata.GetGraph();
+    var currentNode = nodes.find(_ => _.stateName ==  automata.current.__sm_state);
+    if (automata.current === undefined)
+        throw new Error("No initial state specified. Use StartWith() method to specify initial state.")
+    automata.current = Object.assign(automata.current, {
+        canInvoke: <TAction>(action: ActionFunction<TAction>) => currentNode.actions.findIndex(_=>_.actionType == action.actionType) > -1
+    }); 
 
     return (state: IAutomataState<TState> = automata.current, action: IAction<TState>) => {        
         // skip if not state machine;
@@ -23,7 +29,7 @@ export function automataReducer<TState>(automata: IGraphObject<TState>): Redux.R
             throw new Error("Can't find state " + stateAction.targetState)
         
         automata.current = state;
-        let nextState = nextNode.entry(action.payload);
+        let nextState = nextNode.entry(action.payload, state);
         let canInvoke = <TAction>(action: ActionFunction<TAction>) => nextNode.actions.findIndex(_=>_.actionType == action.actionType) > -1       
         let newState: IAutomataState<TState> = Object.assign(nextState, {
             __sm_state: nextNode.stateName,

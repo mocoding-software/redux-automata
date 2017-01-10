@@ -1,0 +1,20 @@
+{
+	"compilerOptions": {
+ 		"sourceMap": true,
+        "noImplicitAny": true,
+        "module": "commonjs",
+        "target": "es5",
+        "jsx": "react",
+        "experimentalDecorators": true,
+        "types": [
+            "node", "es6-shim", "isomorphic-fetch"
+        ],
+		"baseUrl": ".",
+		"paths": {
+      		"redux-automata": ["../src"]
+		}    
+	},
+	"exclude": [
+		"node_modules"
+	]
+}

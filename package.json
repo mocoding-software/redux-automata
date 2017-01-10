@@ -1,6 +1,6 @@
 {
   "name": "redux-automata",
-  "version": "0.0.3",
+  "version": "1.0.0",
   "description": "Finite state automata for Redux.",
   "main": "dist/redux-automata.min.js",
   "typings": "dist/typings/index.d.ts",  
@@ -15,7 +15,11 @@
   },
   "keywords": [
     "redux",
-    "automata" 
+    "automata",
+    "state machine",
+    "state",
+    "redux actions",
+    "predictable state"
   ],
   "author": "MOCODING, LLC",
   "license": "MIT",
@@ -24,12 +28,12 @@
   },
   "homepage": "https://github.com/mocoding-software/redux-automata#readme",
   "devDependencies": {    
-    "@types/node": "6.0.55",
+    "@types/node": "6.0.59",
     "@types/es6-shim": "0.31.32", 
-    "tslint": "4.2.0",
+    "tslint": "4.3.1",
     "typescript": "2.1.4",    
     "webpack": "2.2.0-rc.3",
-    "clean-webpack-plugin": "0.1.14",
+    "clean-webpack-plugin": "0.1.15",
     "ts-loader": "1.3.3",          
     "tslint-loader": "3.3.0"
   },

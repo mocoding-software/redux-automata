@@ -1,6 +1,6 @@
 import * as Redux from 'redux';
 
-export type IAutomataState<TState> = TState & { __sm_state: string };
+export type IAutomataState<TState> = TState & { __sm_state: string } & ICanInvokeCapabilities;
 
 /**
  * Derive state from this interface to get information on possible action transitions in this state
@@ -37,7 +37,7 @@ export interface ActionFunction<TAction> {
  */
 export interface StateFunction<TState, TAction> {
     stateName?: string,
-    (arg: TAction): TState;
+    (arg: TAction, state: TState): TState;
 }
 
 export interface Transition<TAction> {
