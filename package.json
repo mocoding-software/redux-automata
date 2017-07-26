@@ -1,9 +1,9 @@
 {
   "name": "redux-automata",
-  "version": "1.0.0",
+  "version": "1.1.1",
   "description": "Finite state automata for Redux.",
-  "main": "dist/redux-automata.min.js",
-  "typings": "dist/typings/index.d.ts",
+  "main": "./dist/redux-automata.min.js",
+  "typings": "./dist/typings/index.d.ts",
   "scripts": {
     "prebuild": "npm install",
     "build": "webpack --config webpack.config.js --progress --color || echo not ok",
@@ -34,7 +34,7 @@
     "typescript": "2.4.2",
     "webpack": "3.4.1",
     "clean-webpack-plugin": "0.1.16",
-    "awesome-typescript-loader": "3.2.1",
+    "ts-loader": "2.3.1",
     "tslint-loader": "3.5.3"
   },
   "dependencies": {
