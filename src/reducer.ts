@@ -15,7 +15,7 @@ export function automataReducer<TState>(automata: IGraphObject<TState>): Redux.R
         canInvoke: <TAction>(action: ActionFunction<TAction>) => currentNode.actions.findIndex(_=>_.actionType == action.actionType) > -1
     }); 
 
-    return (state: IAutomataState<TState> = automata.current, action: IAction<TState>) => {        
+    return (state: IAutomataState<TState> = automata.initial, action: IAction<TState>) => {        
         // skip if not state machine;
         if (action.__sm__ === undefined)
             return state;       
