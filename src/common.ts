@@ -14,7 +14,7 @@ export interface ICanInvokeCapabilities {
  * to be recognized by StateMachine Middleware.
  */
 export interface IAction<TAction> extends Redux.Action {
-    __sm__: any;
+    __sm__?: any;
     payload?: TAction;
     context?: IActionContext;
 };
@@ -33,9 +33,9 @@ export interface ActionFunction<TAction> {
 }
 
 /**
- * 
+ * Typed Reducer method aka extends Redux.Reducer<TState>
  */
-export interface StateFunction<TState, TAction> {
+export interface StateFunction<TState, TAction> { 
     stateName?: string,
     (state: TState, arg: TAction): TState;
 }
@@ -62,6 +62,7 @@ export interface Edge<TState> {
 }
 
 export interface IGraphObject<TState> {
+    initial: IAutomataState<TState>;
     current: IAutomataState<TState>;
     GetGraph: () => Node<TState>[];
 }

@@ -12,7 +12,8 @@ import {
 
 
 export class Automata<TState> implements IStateMachineOptions<TState>, IGraphObject<TState> {
-
+    
+    initial: IAutomataState<TState>;
     current: IAutomataState<TState>;
     private builders: StateBuilder<TState>[] = [];
 
@@ -37,7 +38,7 @@ export class Automata<TState> implements IStateMachineOptions<TState>, IGraphObj
         if (!builder)
             throw new Error("State should be previously defined using this.state(...) method.");
 
-        this.current = Object.assign(state({} as TState, {}), { 
+        this.initial = Object.assign(state({} as TState, {}), { 
             __sm_state: state.stateName,
             canInvoke: () => false
         });

@@ -4,7 +4,7 @@
     "description": "Provides a set of examples.",
     "scripts": {
         "basic": "webpack-dev-server --config configs/basic.js --port 3000 --hot",
-        "async": "webpack-dev-server --config configs/async.js --port 3000 --hot"        
+        "async": "webpack-dev-server --config configs/async.js --port 3000 --hot"
     },
     "author": "MOCODING, LLC",
     "license": "MIT",
@@ -21,18 +21,18 @@
     "devDependencies": {
         "@types/es6-shim": "0.31.32",
         "@types/node": "6.0.59",
-        "@types/isomorphic-fetch": "0.0.31",        
+        "@types/isomorphic-fetch": "0.0.31",
         "@types/react": "0.14.54",
         "@types/react-bootstrap": "0.0.37",
-        "@types/react-dom": "0.14.20",        
-        "@types/react-redux": "4.4.35",        
-        "clean-webpack-plugin": "0.1.15",        
+        "@types/react-dom": "0.14.20",
+        "@types/react-redux": "4.4.35",
+        "clean-webpack-plugin": "0.1.15",
         "html-webpack-plugin": "2.26.0",
         "html-webpack-template": "6.0.0",
-        "react-hot-loader": "3.0.0-beta.6",        
+        "react-hot-loader": "3.0.0-beta.6",
         "ts-loader": "1.3.3",
-        "typescript": "2.1.4",        
+        "typescript": "2.1.4",
         "webpack": "v2.2.0-rc.3",
-        "webpack-dev-server": "v2.2.0-rc.0"        
+        "webpack-dev-server": "v2.2.0-rc.0"
     }
 }

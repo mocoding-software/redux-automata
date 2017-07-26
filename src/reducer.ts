@@ -3,10 +3,14 @@ import { IGraphObject, IAutomataState, IAction, ActionFunction } from './common'
 
 export function automataReducer<TState>(automata: IGraphObject<TState>): Redux.Reducer<IAutomataState<TState>> {
 
+    if (automata.initial === undefined)
+        throw new Error("No initial state specified. Use BeginWith() method to specify initial state.")
+
+    automata.current = automata.initial;
+
     const nodes = automata.GetGraph();
     var currentNode = nodes.find(_ => _.stateName ==  automata.current.__sm_state);
-    if (automata.current === undefined)
-        throw new Error("No initial state specified. Use BeginWith() method to specify initial state.")
+
     automata.current = Object.assign(automata.current, {
         canInvoke: <TAction>(action: ActionFunction<TAction>) => currentNode.actions.findIndex(_=>_.actionType == action.actionType) > -1
     }); 
@@ -29,8 +33,8 @@ export function automataReducer<TState>(automata: IGraphObject<TState>): Redux.R
             throw new Error("Can't find state " + stateAction.targetState)
         
         automata.current = state;
-        let nextState = nextNode.entry(action.payload, state);
-        let canInvoke = <TAction>(action: ActionFunction<TAction>) => nextNode.actions.findIndex(_=>_.actionType == action.actionType) > -1       
+        let nextState = nextNode.entry(state, action.payload);
+        let canInvoke = <TAction>(action: ActionFunction<TAction>) => nextNode.actions.findIndex(_=>_.actionType == action.actionType) > -1               
         let newState: IAutomataState<TState> = Object.assign(nextState, {
             __sm_state: nextNode.stateName,
             canInvoke

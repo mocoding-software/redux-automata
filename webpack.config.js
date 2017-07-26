@@ -5,35 +5,34 @@ var distPath = path.join(__dirname, "dist");
 
 module.exports = {
   entry: {
-    "lib": ["./src/index.ts"]
+    "redux-automata": ["./src/index.ts"]
   },
   output: {
     path: distPath,
-    filename: "redux-automata.min.js",
-    library: "redux-automata",
-    libraryTarget: "umd"    
+    filename: "[name].min.js",
+    library: "[name]",
+    libraryTarget: "umd"
   },
   resolve: {
-	  extensions: [".ts", ".js"]
+    extensions: [".ts", ".js"]
   },
 
   module: {
     loaders: [{
       test: /\.(ts|tsx)?$/,
-      loaders: ["ts-loader"],
+      use: "awesome-typescript-loader",
       exclude: [/node_modules/]
-	}]
+    }]
   },
   plugins: [
     new webpack.DefinePlugin({
       'process.env': {
-        BROWSER: JSON.stringify(true),
         NODE_ENV: JSON.stringify('production')
       }
     }),
     new CleanWebpackPlugin([distPath]),
-    new webpack.optimize.DedupePlugin(),        
+    new webpack.optimize.DedupePlugin(),
     new webpack.optimize.UglifyJsPlugin(),
-    new webpack.optimize.OccurrenceOrderPlugin()    
+    new webpack.optimize.OccurrenceOrderPlugin()
   ]
 };

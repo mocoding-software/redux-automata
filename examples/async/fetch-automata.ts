@@ -23,7 +23,7 @@ const automata = new Automata<IResponseState>("FetchAutomata");
 //states
 const Idle = automata.State("Idle", () => ({}));
 const Fetching = automata.State("Fetching", () => ({ isFetching: true }));
-const Fetched = automata.State<GithubResposne>("Fetched", (state, data) => ({ data: data }));
+const Fetched = automata.State<GithubResposne>("Fetched", (state, data) => ({ data }));
 const FetchingFailed = automata.State<string>("Fetching Calendars Failed", (state, error) => ({ error }));
 
 //actions
@@ -34,13 +34,13 @@ const RequestFailed = automata.Action<string>("Request Failed");
 
 //transitions
 const FetchData = (dispatch: Redux.Dispatch<any>) =>
-    fetch("http://api.github.com/repos/mocoding-software/redux-automata")
+    fetch("https://api.github.com/repos/mocoding-software/redux-automata")
         .then(response => {
             response.text().then(text => {
                 const data = JSON.parse(text);
                 if (response.status == 200) {                               
                     //dispatch(RequestSucceeded(data));
-                    //small delay to see a loader
+                    //small delay to see a loader                    
                     setTimeout(()=>dispatch(RequestSucceeded(data)), 1000);
                 }
                 else

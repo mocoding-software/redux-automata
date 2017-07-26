@@ -72,7 +72,7 @@ class View extends React.Component<IViewProps, {}> {
     }
 
     onRenderData(): JSX.Element {
-        const { data } = this.props.response;
+        const { data } = this.props.response;        
         return <Well bsSize="large">
             <Row>
                 <Col sm={12}>
@@ -84,10 +84,10 @@ class View extends React.Component<IViewProps, {}> {
                     <h3>{data.description}</h3>
                 </Col>
             </Row>
-            <br />
+            <br />            
             <Row style={{ "text-align": "center" }}>
                 <Col xs={4}>
-                    <Glyphicon glyph="eye-open" /> Watchers <Badge>{data.forks_count}</Badge>
+                    <Glyphicon glyph="eye-open" /> Watchers <Badge>{data.watchers_count}</Badge>
                 </Col>
                 <Col xs={4}>
                     <Glyphicon glyph="star" /> Stars <Badge>{data.stargazers_count}</Badge>
