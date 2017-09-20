@@ -35,38 +35,26 @@ export interface IActionFunction<TAction> {
 /**
  * Typed Reducer method aka extends Redux.Reducer<TState>
  */
-export interface IStateFunction<TState, TAction> {
+export type TypedReducer<TState, TAction> = (state: TState, arg: TAction) => TState;
+
+/**
+ * Typed Reducer method aka extends Redux.Reducer<TState>
+ */
+export interface IStateFunction<TState, TAction = {}> extends TypedReducer<TState, TAction> {
     stateName?: string;
-    (state: TState, arg: TAction): TState;
 }
 
-export type Transition<TAction> = (dispatch: Redux.Dispatch<any>, arg: TAction) => void;
-
-/**
- * Node of the graph for finite automata.
- */
-export interface INode<TState> {
-    stateName: string;
-    entry: IStateFunction<TState, any>;
-    actions: IEdge<TState>[];
-}
-/**
- * Edge between nodes in the finite automata graph
- */
-export interface IEdge<TState> {
-    actionType: string;
-    transitions: Transition<any>[];
-    targetState: string;
-}
+export type TransitionMethod<TAction = {}> = (dispatch: Redux.Dispatch<any>, arg: TAction) => void;
 
 export interface IGraphObject<TState> {
     Initial: AutomataState<TState>;
     Current: AutomataState<TState>;
-    GetGraph: () => INode<TState>[];
+    // GetGraph: () => INode<TState>[];
 }
 
 export interface IStateMachineOptions<TState> {
     In(state: IStateFunction<TState, any>): IStateOptions<TState>;
+    InAny(): IStateOptions<TState>;
 }
 
 export interface IStateOptions<TState> {
@@ -75,16 +63,8 @@ export interface IStateOptions<TState> {
 
 export interface IActionOptions<TState, TAction> {
     GoTo(state: IStateFunction<TState, TAction>): IStateOptionsEx<TState>;
-    Execute(transition: Transition<TAction>): IActionOptions<TState, TAction>;
+    Execute(transition: TransitionMethod<TAction>): IActionOptions<TState, TAction>;
 }
 
 export interface IStateOptionsEx<TState>
     extends IStateOptions<TState>, IStateMachineOptions<TState> { }
-
-export interface INodeBuilder<TState> {
-    ToNode(): INode<TState>;
-}
-
-export interface IEdgeBuilder<TState> {
-    ToEdge(): IEdge<TState>;
-}
