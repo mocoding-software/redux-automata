@@ -10,10 +10,13 @@
 		"declaration": true,
 		"outDir": "typings",
 		"baseUrl": "./src",
-		"removeComments": true,
-		"types": [
-			"node", "es6-shim"
-		]
+        "removeComments": true,
+        "lib": [
+            "es6"            
+        ],
+        "types":[
+            "node"
+        ]
 	},
 	"files": [
 		"src/index.ts"

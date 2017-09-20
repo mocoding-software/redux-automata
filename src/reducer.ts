@@ -1,21 +1,21 @@
 import * as Redux from "redux"
-import { IGraphObject, IAutomataState, IAction, ActionFunction } from './common';
+import { IGraphObject, AutomataState, IAction, IActionFunction } from './common';
 
-export function automataReducer<TState>(automata: IGraphObject<TState>): Redux.Reducer<IAutomataState<TState>> {
+export function automataReducer<TState>(automata: IGraphObject<TState>): Redux.Reducer<AutomataState<TState>> {
 
-    if (automata.initial === undefined)
+    if (automata.Initial === undefined)
         throw new Error("No initial state specified. Use BeginWith() method to specify initial state.")
 
-    automata.current = automata.initial;
+    automata.Current = automata.Initial;
 
     const nodes = automata.GetGraph();
-    var currentNode = nodes.find(_ => _.stateName ==  automata.current.__sm_state);
+    var currentNode = nodes.find(_ => _.stateName ==  automata.Current.__sm_state);
 
-    automata.current = Object.assign(automata.current, {
-        canInvoke: <TAction>(action: ActionFunction<TAction>) => currentNode.actions.findIndex(_=>_.actionType == action.actionType) > -1
+    automata.Current = Object.assign(automata.Current, {
+        canInvoke: <TAction>(action: IActionFunction<TAction>) => currentNode.actions.findIndex(_=>_.actionType == action.actionType) > -1
     }); 
 
-    return (state: IAutomataState<TState> = automata.initial, action: IAction<TState>) => {        
+    return (state: AutomataState<TState> = automata.Initial, action: IAction<TState>) => {        
         // skip if not state machine;
         if (action.__sm__ === undefined)
             return state;       
@@ -32,10 +32,10 @@ export function automataReducer<TState>(automata: IGraphObject<TState>): Redux.R
         if (!nextNode)
             throw new Error("Can't find state " + stateAction.targetState)
         
-        automata.current = state;
+        automata.Current = state;
         let nextState = nextNode.entry(state, action.payload);
-        let canInvoke = <TAction>(action: ActionFunction<TAction>) => nextNode.actions.findIndex(_=>_.actionType == action.actionType) > -1               
-        let newState: IAutomataState<TState> = Object.assign(nextState, {
+        let canInvoke = <TAction>(action: IActionFunction<TAction>) => nextNode.actions.findIndex(_=>_.actionType == action.actionType) > -1               
+        let newState: AutomataState<TState> = Object.assign(nextState, {
             __sm_state: nextNode.stateName,
             canInvoke
         });

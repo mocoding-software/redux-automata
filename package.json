@@ -1,44 +1,41 @@
 {
-  "name": "redux-automata",
-  "version": "1.1.2",
-  "description": "Finite state automata for Redux.",
-  "main": "./dist/redux-automata.min.js",
-  "typings": "./dist/typings/index.d.ts",
-  "scripts": {
-    "prebuild": "npm install",
-    "build": "webpack --config webpack.config.js --progress --color || echo not ok",
-    "prerelease": "npm run build"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/mocoding-software/redux-automata.git"
-  },
-  "keywords": [
-    "redux",
-    "automata",
-    "state machine",
-    "state",
-    "redux actions",
-    "predictable state"
-  ],
-  "author": "MOCODING, LLC",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/mocoding-software/redux-automata/issues"
-  },
-  "homepage": "https://github.com/mocoding-software/redux-automata#readme",
-  "devDependencies": {
-    "@types/node": "8.0.17",
-    "@types/es6-shim": "0.31.34",
-    "tslint": "5.5.0",
-    "typescript": "2.4.2",
-    "webpack": "3.4.1",
-    "clean-webpack-plugin": "0.1.16",
-    "ts-loader": "2.3.1",
-    "tslint-loader": "3.5.3"
-  },
-  "dependencies": {
-    "es6-shim": "0.35.3",
-    "redux": "3.7.2"
-  }
+    "name": "redux-automata",
+    "version": "1.1.2",
+    "description": "Finite state automata for Redux.",
+    "main": "./dist/redux-automata.min.js",
+    "typings": "./dist/typings/index.d.ts",
+    "scripts": {
+        "build": "webpack --config webpack.config.js --progress --color || echo not ok",
+        "prerelease": "npm run build"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/mocoding-software/redux-automata.git"
+    },
+    "keywords": [
+        "redux",
+        "automata",
+        "state machine",
+        "state",
+        "redux actions",
+        "predictable state"
+    ],
+    "author": "MOCODING, LLC",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/mocoding-software/redux-automata/issues"
+    },
+    "homepage": "https://github.com/mocoding-software/redux-automata#readme",
+    "devDependencies": {
+        "tslint": "5.7.0",
+        "typescript": "2.5.2",
+        "webpack": "3.6.0",
+        "clean-webpack-plugin": "0.1.16",
+        "ts-loader": "2.3.7",
+        "tslint-loader": "3.5.3",
+        "@types/node": "8.0.28"
+    },
+    "dependencies": {
+        "redux": "3.7.2"
+    }
 }

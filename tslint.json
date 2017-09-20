@@ -1,6 +1,11 @@
 {
-	"extends": "tslint:recommended",
-	"rules": {
-		"use-strict": true
-	}
+    "extends": "tslint:recommended",
+    "rules": {
+        "use-strict": true,
+        "curly": [true, "as-needed"],
+        "trailing-comma": false,
+        "interface-name": [true, "always-prefix"],
+        "arrow-parens": [true, "ban-single-arg-parens"],
+        "array-type": [true, "array"]
+    }
 }
