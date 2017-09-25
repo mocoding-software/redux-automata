@@ -11,11 +11,12 @@
 		"outDir": "typings",
 		"baseUrl": "./src",
         "removeComments": true,
+        "strict": true,
         "lib": [
             "es6"            
         ],
         "types":[
-            "node"
+            "node", "jest"
         ]
 	},
 	"files": [

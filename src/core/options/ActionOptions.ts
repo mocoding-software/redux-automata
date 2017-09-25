@@ -1,4 +1,5 @@
 import {
+    ActionPayload,
     IActionOptions,
     IStateFunction,
     IStateMachineOptions,
@@ -30,7 +31,7 @@ export class ActionOptions<TState, TAction> implements IActionOptions<TState, TA
         return this;
     }
 
-    public CreateArcs(): IArc<TState>[] {
+    public CreateArcs(): IArc<ActionPayload>[] {
         const {
             sourceStates,
             actionType,
@@ -38,7 +39,7 @@ export class ActionOptions<TState, TAction> implements IActionOptions<TState, TA
             transitions
         } = this;
 
-        return sourceStates.map<IArc<TState>>(sourceState => ({
+        return sourceStates.map(sourceState => ({
             actionType,
             sourceState,
             targetState,

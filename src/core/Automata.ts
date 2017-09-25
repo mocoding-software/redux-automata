@@ -1,8 +1,10 @@
 import {
+    ACTION_TYPE_PREFIEX,
+    ActionPayload,
     AutomataState,
-    IAction,
     IActionFunction,
     IGraphObject,
+    IPayloadAction,
     IStateFunction,
     IStateMachineOptions,
     IStateOptions,
@@ -14,7 +16,7 @@ export class Automata<TState> implements IStateMachineOptions<TState>, IGraphObj
     public Initial: AutomataState<TState>;
     public Current: AutomataState<TState>;
 
-    private states: IStateFunction<TState, any>[] = [];
+    private states: IStateFunction<TState, ActionPayload>[] = [];
     private options: StateOptions<TState>[] = [];
 
     /**
@@ -23,7 +25,7 @@ export class Automata<TState> implements IStateMachineOptions<TState>, IGraphObj
     constructor(protected automataName: string) {
     }
 
-    public In(state: IStateFunction<TState, any>): IStateOptions<TState> {
+    public In(state: IStateFunction<TState, ActionPayload>): IStateOptions<TState> {
         const existingState = this.states.find(_ => _.stateName === state.stateName);
         if (!existingState)
             throw new Error("State should be defined using this.state(...) method.");
@@ -50,36 +52,37 @@ export class Automata<TState> implements IStateMachineOptions<TState>, IGraphObj
         });
     }
 
-    public State<TAction>(name: string, reducer: TypedReducer<TState, TAction>): IStateFunction<TState, TAction> {
+    public State<TActionPayload extends ActionPayload = undefined>(
+        name: string,
+        reducer: TypedReducer<TState, TActionPayload>): IStateFunction<TState, TActionPayload> {
+
         const duplicate = this.states.find(_ => _.stateName === name);
         if (duplicate)
             throw new Error("State with the same name already exist: " + name);
-        const newState = Object.assign({}, reducer, { stateName: name }) as IStateFunction<TState, TAction>;
+        const newState = Object.assign(reducer, { stateName: name });
         this.states.push(newState);
 
         return newState;
     }
 
-    public Action<TActionPayload>(type: string) {
-        const actionType = this.automataName + "/" + type;
+    public Action<TActionPayload extends ActionPayload = undefined>(type: string): IActionFunction<TActionPayload> {
+        const actionType = ACTION_TYPE_PREFIEX + " " + this.automataName + " / " + type;
 
-        const func: IActionFunction<TActionPayload> = (payload: TActionPayload) => {
-            const action: IAction<TActionPayload> = {
-                __sm__: this.automataName,
+        const func = (payload: TActionPayload) => {
+            const action: IPayloadAction<TActionPayload> = {
                 payload,
                 type: actionType
             };
             return action;
         };
 
-        func.actionType = type;
-        return func;
+        return Object.assign(func, { actionType });
     }
 
-    public getGraph(): INode<TState>[] {
+    public getGraph(): INode<TState, ActionPayload>[] {
         const arcs = this.options.reduce((a, b) => a.concat(b.getArcs()), new Array<IArc<TState>>());
 
-        return this.states.map<INode<TState>>(entry => {
+        return this.states.map<INode<TState, ActionPayload>>(entry => {
             let actions = arcs
                 .filter(_ => _.sourceState === entry.name)
                 .map<IEdge<TState>>(_ => ({

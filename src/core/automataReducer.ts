@@ -1,6 +1,6 @@
 import * as Redux from "redux";
 import {Automata} from "./Automata";
-import { AutomataState, IAction, IActionFunction, IGraphObject } from "./common";
+import { ActionPayload, AutomataState, IActionFunction, IContextAction, IGraphObject } from "./common";
 
 export function automataReducer<TState>(automata: Automata<TState>): Redux.Reducer<AutomataState<TState>> {
 
@@ -12,14 +12,18 @@ export function automataReducer<TState>(automata: Automata<TState>): Redux.Reduc
     const nodes = automata.getGraph();
     const currentNode = nodes.find(_ => _.entry.stateName ===  automata.Current.__sm_state);
 
+    if (!currentNode)
+        throw new Error("Can't find initial state.");
+
     automata.Current = Object.assign(automata.Current, {
         canInvoke: <TAction>(action: IActionFunction<TAction>) =>
             currentNode.actions.findIndex(_ => _.actionType === action.actionType) > -1
     });
 
-    return (state: AutomataState<TState> = automata.Initial, action: IAction<TState>) => {
+    return <TPayload extends ActionPayload = undefined>
+        (state: AutomataState<TState> = automata.Initial, action: IContextAction<TPayload>) => {
         // skip if not state machine;
-        if (action.__sm__ === undefined)
+        if (!action.context)
             return state;
 
         const node = nodes.find(_ => _.entry.stateName === state.__sm_state);
