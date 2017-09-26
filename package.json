@@ -7,7 +7,7 @@
     "scripts": {
         "build": "webpack --config webpack.config.js --progress --color || echo not ok",
         "prerelease": "npm run build",
-        "test": "jest"
+        "test": "jest --verbose"
     },
     "repository": {
         "type": "git",

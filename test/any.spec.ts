@@ -5,7 +5,7 @@ interface ITestState {
     value: string;
 }
 
-test("Default", () => {
+describe("Absolute Transitions", () => {
     const automata = new Automata<ITestState>("Default State");
 
     const Idle = automata.State("Idle", () => ({ value: null }));
@@ -14,7 +14,7 @@ test("Default", () => {
     const SetMessage = automata.Action<string>("Set Message");
 
     automata
-        .In(Idle)
+        .InAny()
             .On(SetMessage)
                 .GoTo(Active);
 
@@ -23,13 +23,19 @@ test("Default", () => {
     const reducer = automataReducer(automata);
     const store = Redux.createStore(reducer, Redux.applyMiddleware(automataMiddleware));
 
-    let currentState = store.getState();
-    expect(currentState.__sm_state).toBe(Idle.stateName);
-    expect(currentState.value).toBe(null);
+    test("On Action Test", () => {
+        store.dispatch(SetMessage("Test"));
 
-    store.dispatch(SetMessage("Test"));
+        const currentState = store.getState();
+        expect(currentState.__sm_state).toBe(Active.stateName);
+        expect(currentState.value).toBe("Test");
+    });
 
-    currentState = store.getState();
-    expect(currentState.__sm_state).toBe(Active.stateName);
-    expect(currentState.value).toBe("Test");
+    test("On Action 2 Test", () => {
+        store.dispatch(SetMessage("Test 2"));
+
+        const currentState = store.getState();
+        expect(currentState.__sm_state).toBe(Active.stateName);
+        expect(currentState.value).toBe("Test 2"); // this should be updated
+    });
 });

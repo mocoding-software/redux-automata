@@ -84,7 +84,7 @@ export class Automata<TState> implements IStateMachineOptions<TState>, IGraphObj
 
         return this.states.map<INode<TState, ActionPayload>>(entry => {
             let actions = arcs
-                .filter(_ => _.sourceState === entry.name)
+                .filter(_ => _.sourceState === entry.stateName)
                 .map<IEdge<TState>>(_ => ({
                     actionType: _.actionType,
                     targetState: _.targetState,

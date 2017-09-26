@@ -40,7 +40,7 @@ export interface IActionContext {
  */
 export interface IActionFunction<TPayload extends ActionPayload = undefined> {
     actionType: string;
-    (arg: TPayload): IPayloadAction<TPayload>;
+    (arg?: TPayload): IPayloadAction<TPayload>;
 }
 
 /**
