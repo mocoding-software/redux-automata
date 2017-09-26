@@ -1,24 +1,25 @@
 # Finite state machine for Redux
 
-redux-automata - is a finite state machine based on Redux store. 
-It allows developer to generate reducer automatically based on current state. 
+redux-automata - is a finite state machine for Redux store. 
+It allows developer to configure finite state machine and generate reducer automatically based on graph object produced. 
 The library was developed to support the following scenarios:
-* Provide different behavoiur for the same action and avoid massive if-then-else
+* Provide different behavoiur for the same action depending on current state
 * Ignore specific actions while in specific states (or better saying - process actions only in specific states)
+* Use declarative approach for defining actions, states and transitions instead of switch-case and if-then-else
 
-## Example
+## Example 
 
-Better than any words, please see the code (TypeScript):
+The following example is written on Typescript but you can use Javascript as well:
 
 ```typescript
 import * as Redux from "redux";
 import { Automata, automataReducer } from 'redux-automata';
 
-export interface IState{
+export interface State{
     message: string;
 }
 
-const automata = new Automata<IState>("Counter");
+const automata = new Automata<State>("Counter");
 
 // define states
 const Off = automata.State("Off", () => ({ message: "Switched Off" }));
@@ -29,14 +30,14 @@ const Toggle = automata.Action("Toggle");
 
 // configure state machine
 automata
-    .In(Off)
-        .On(Toggle)
-            .GoTo(On)
-    .In(On)
-        .On(Toggle)
-            .GoTo(Off);
+    .in(Off)
+        .on(Toggle)
+            .goTo(On)
+    .in(On)
+        .on(Toggle)
+            .goTo(Off);
 
-automata.BeginWith(Off);
+automata.beginWith(Off);
 
 const reducer = automataReducer(automata);
 export {
@@ -46,7 +47,7 @@ export {
 ```
 
 In this simple example we configured a state machine with two states and one action. 
-The action will cause different behaviour depending on current state.
+The action will lrad to different behaviour depending on current state.
 The similar functionality could be achieved by writing the following reducer:
 
 ```typescript
@@ -92,13 +93,11 @@ export {
 ## Usage Details
 
 Redux Automata allows configuring state and actions in declrative way. 
-Every state is a function that will be executed on entry. 
-Every action is a function that will lead to generating action with ```type``` and ```payload```. 
+Every state is a reducer function that will be executed on entry. 
+Every action is a function that returns action with ```type``` and ```payload```. 
 
 ### Creating States
-Defining state is very similar on how reducer is defined. 
-Except you have to specify name of the state and function that returns state based on typed argument and current state.
-It uses the same signature as reducer:
+Defining the state is absolutely the same on how reducer is defined. In addition to that you have to specify friendly name for the state (should be unique within automata).
 
 ```typescript
     (state: TState, arg: TAction): TState;
@@ -108,23 +107,23 @@ It uses the same signature as reducer:
 
 ```typescript
     // returns empty state
-    const Idle = automata.State("Idle", () => ({});
+    const Idle = automata.state("Idle", () => ({});
     // returns state with message set to arg
-    const MessageSet = automata.State("Message is set", (state, arg) => ({ message: arg});
+    const MessageSet = automata.state("Message is set", (state, arg) => ({ message: arg });
     // returns state with existing message value and new value for property count.
-    const CountSet = automata.State("Count is set", (state, arg) => ({ message: state.message, count: arg});
+    const CountSet = automata.state("Count is set", (state, arg) => ({ message: state.message, count: arg });
 ```
 
 ### Creating Actions
-Defining action is simlified to define type and strongly typed argument that is expected to receive as a ```payload```. 
+Defining action is simlified to define action name (type) and strongly typed argument that is expected to receive as a ```payload```. 
 
 #### Examples
 
 ```typescript
     // returns function that accepts <string> and returns { type: "Set Message": payload: "<string>" }
-    const SetMessage = automata.Action<string>("Set Message");
+    const SetMessage = automata.action<string>("Set Message");
     // returns function that accepts <number> and returns { type: "Set Count": payload: <number> }
-    const SetCount = automata.Action<number>("Set Count");    
+    const SetCount = automata.action<number>("Set Count");    
 ```
 
 ### Creating Transitions
@@ -146,24 +145,18 @@ const FetchData = (dispatch) =>
 ...
 
 automata
-    .In(Idle)
-        .On(Fetch)
-            .Execute(FetchData) // <-- transition
-            .GoTo(Fetching)
-    .In(Fetching)
-        .On(RequestSucceeded)
-            .GoTo(Fetched)
-        .On(RequestFailed)
-            .GoTo(FetchingFailed)
+    .in(Idle)
+        .on(Fetch)
+            .execute(FetchData) // <-- transition
+            .goTo(Fetching)
+    .in(Fetching)
+        .on(RequestSucceeded)
+            .goTo(Fetched)
+        .on(RequestFailed)
+            .goTo(FetchingFailed)
 ```
 
-FetchData function will be executed right after automata gets to Fetching state. 
-Sometimes it is easy to lost between what is action, state and transition.
-Think this way:
-* action - event with argument that is sent to automata
-* state - function that transforms event argument to state data
-* transtion - any pther business logic that ends up sending events
-
+FetchData function will be executed right after automata switched to Fetching state. 
 Transitions may be defined using the following signature:
 
 ```typescript
@@ -173,27 +166,27 @@ Transitions may be defined using the following signature:
 Please note that transitions do not have and should not have access to store, 
 since there is no guarantee that state is not changed during the transition. All parameters should be comming through arguments.
 
-### Can Invoke Capabilities
-Sometimes it is useful to know whenever certain actions are enabled for specific state. 
+### Check State Transitions
+Sometimes it is useful to know whenever certain actions are "enabled" for specific state. 
 Best use case to describe this scenario is to disable button during async request. 
-In example above automata is switched to Fetching State so Fetch becomes not availible.
+In example above automata is switched to Fetching State so it no longer respond to Fetch action.
 To access this functionality you may use canInvoke method that becomes availible on state instance maintained by automata.
 
 ```typescript
     
-import { IResponseState, Refresh } from './fetch-automata';
-import { ICanInvokeCapabilities } from 'redux-automata';
+import { ResponseState, Refresh } from './fetch-automata';
+import { CanInvokeCapabilities } from 'redux-automata';
 
 const { connect } = require('react-redux');
 
-interface IViewProps {
-    response?: IResponseState;
+interface ViewProps {
+    response?: ResponseState;
     canRefresh?: boolean;
     refresh?: () => void;
 }
 
 @connect(
-    (state: IResponseState & ICanInvokeCapabilities) => ({
+    (state: ResponseState & CanInvokeCapabilities) => ({
         response: state,
         canRefresh: state.canInvoke(Refresh)
     }),
@@ -226,7 +219,8 @@ Every example static content is served from http://localhost:3000 with hot reloa
 
 ## Contributions
 
-All source code is located in ```src``` folder. There is no unit tests yet. 
+All source code is located in ```src``` folder.
+All tests located in ```test``` folder.
 You may use examples to play with and/or improve existing code base.
 
 ## Contact Us
