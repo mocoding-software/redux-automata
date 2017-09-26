@@ -1,4 +1,4 @@
-import { IActionFunction, IActionOptions, IStateMachineOptions, IStateOptions } from "../common";
+import { IActionFunction, IActionOptions, IStateFunction, IStateMachineOptions, IStateOptions } from "../common";
 import { ActionOptions } from "./ActionOptions";
 import { IArc, IArcCreator } from "./common";
 
@@ -14,6 +14,11 @@ export class StateOptions<TState> implements IStateOptions<TState> {
         const builder = new ActionOptions<TState, TAction>(this.sourceStates, action.actionType, this.smOptions, this);
         this.builders.push(builder);
         return builder;
+    }
+
+    public Or(state: IStateFunction<TState, undefined>): IStateOptions<TState> {
+        this.sourceStates.push(state.stateName);
+        return this;
     }
 
     public getArcs(): IArc<TState>[] {

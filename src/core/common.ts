@@ -73,6 +73,7 @@ export interface IStateMachineOptions<TState> {
 
 export interface IStateOptions<TState> {
     On<TPayload extends ActionPayload>(action: IActionFunction<TPayload>): IActionOptions<TState, TPayload>;
+    Or(state: IStateFunction<TState>): IStateOptions<TState>;
 }
 
 export interface IActionOptions<TState, TPayload extends ActionPayload> {
@@ -80,5 +81,7 @@ export interface IActionOptions<TState, TPayload extends ActionPayload> {
     Execute(transition: TransitionMethod<TPayload>): IActionOptions<TState, TPayload>;
 }
 
-export interface IStateOptionsEx<TState>
-    extends IStateOptions<TState>, IStateMachineOptions<TState> { }
+export interface IStateOptionsEx<TState> {
+    In(state: IStateFunction<TState>): IStateOptions<TState>;
+    On<TPayload extends ActionPayload>(action: IActionFunction<TPayload>): IActionOptions<TState, TPayload>;
+ }
