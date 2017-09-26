@@ -2,12 +2,18 @@
 	"compilerOptions": {
  		"sourceMap": true,
         "noImplicitAny": true,
+        "moduleResolution": "node",   
         "module": "commonjs",
         "target": "es5",
         "jsx": "react",
-        "experimentalDecorators": true,
+        "skipLibCheck": true,
+        "experimentalDecorators": true,        
+        "lib": [
+            "es6",
+            "dom"
+        ],
         "types": [
-            "node", "es6-shim", "isomorphic-fetch"
+            "node", "isomorphic-fetch"
         ],
 		"baseUrl": ".",
 		"paths": {

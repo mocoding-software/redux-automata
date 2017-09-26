@@ -1,26 +1,26 @@
 import * as Redux from "redux";
-import { Automata, automataReducer } from 'redux-automata';
+import { Automata, automataReducer } from "redux-automata";
 
-export interface IState{
+export interface State{
     message: string;
 }
 
-const automata = new Automata<IState>("Counter");
-//states
-const Off = automata.State("Off", () => ({ message: "Switched Off" }));
-const On = automata.State("On", () => ({ message: "Switched On" }));
-//actions
-const Toggle = automata.Action("Toggle");
+const automata = new Automata<State>("Counter");
+// states
+const Off = automata.state("Off", () => ({ message: "Switched Off" }));
+const On = automata.state("On", () => ({ message: "Switched On" }));
+// actions
+const Toggle = automata.action("Toggle");
 
 automata
-    .In(Off)
-        .On(Toggle)
-            .GoTo(On)
-    .In(On)
-        .On(Toggle)
-            .GoTo(Off);
+    .in(Off)
+        .on(Toggle)
+            .goTo(On)
+    .in(On)
+        .on(Toggle)
+            .goTo(Off);
 
-automata.BeginWith(Off);
+automata.beginWith(Off);
 
 const reducer = automataReducer(automata);
 export {

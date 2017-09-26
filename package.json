@@ -1,6 +1,6 @@
 {
     "name": "redux-automata",
-    "version": "1.1.2",
+    "version": "2.0.0-alpha",
     "description": "Finite state automata for Redux.",
     "main": "./dist/redux-automata.min.js",
     "typings": "./dist/typings/index.d.ts",
@@ -28,11 +28,11 @@
     },
     "homepage": "https://github.com/mocoding-software/redux-automata#readme",
     "devDependencies": {
-        "@types/jest": "^21.1.0",
-        "@types/node": "8.0.28",
+        "@types/jest": "21.1.0",        
+        "@types/node": "8.0.31",
         "clean-webpack-plugin": "0.1.16",
-        "jest": "^21.1.0",
-        "ts-jest": "^21.0.1",
+        "jest": "21.1.0",
+        "ts-jest": "21.0.1",
         "ts-loader": "2.3.7",
         "tslint": "5.7.0",
         "tslint-loader": "3.5.3",
