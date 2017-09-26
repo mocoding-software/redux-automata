@@ -1,16 +1,16 @@
 import {
     ActionPayload,
-    IActionOptions,
-    IStateFunction,
-    IStateMachineOptions,
-    IStateOptions,
-    IStateOptionsEx,
+    ActionFluentOptions,
+    StateDefinition,
+    StateMachineOptions,
+    StateFluentOptions,
+    StateFluetOptionsEx,
     TransitionMethod
 } from "../common";
-import { IArc, IArcCreator } from "./common";
+import { Arc, ArcCreator } from "./common";
 import { StateOptionsEx } from "./StateOptionsEx";
 
-export class ActionOptions<TState, TAction> implements IActionOptions<TState, TAction>, IArcCreator<TState> {
+export class ActionOptions<TState, TAction> implements ActionFluentOptions<TState, TAction>, ArcCreator<TState> {
 
     private transitions: TransitionMethod<TAction>[] = [];
     private targetState: string;
@@ -18,20 +18,20 @@ export class ActionOptions<TState, TAction> implements IActionOptions<TState, TA
     constructor(
         private sourceStates: string[],
         private actionType: string,
-        private smOptions: IStateMachineOptions<TState>,
-        private stateOptions: IStateOptions<TState>) { }
+        private smOptions: StateMachineOptions<TState>,
+        private stateOptions: StateFluentOptions<TState>) { }
 
-    public GoTo(state: IStateFunction<TState, TAction>): IStateOptionsEx<TState> {
+    public goTo(state: StateDefinition<TState, TAction>): StateFluetOptionsEx<TState> {
         this.targetState = state.stateName;
         return new StateOptionsEx(this.smOptions, this.stateOptions);
     }
 
-    public Execute(transition: TransitionMethod<TAction>): IActionOptions<TState, TAction> {
+    public execute(transition: TransitionMethod<TAction>): ActionFluentOptions<TState, TAction> {
         this.transitions.push(transition);
         return this;
     }
 
-    public CreateArcs(): IArc<ActionPayload>[] {
+    public createArcs(): Arc<ActionPayload>[] {
         const {
             sourceStates,
             actionType,

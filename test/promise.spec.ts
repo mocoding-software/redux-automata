@@ -1,22 +1,22 @@
 import * as Redux from "redux";
 import { Automata, automataMiddleware, automataReducer, TransitionMethod } from "../src";
 
-interface ITestState {
+interface TestState {
     processing: boolean;
     value?: string;
 }
 
 describe("Transitions With Promise", () => {
-    const automata = new Automata<ITestState>("Default State");
+    const automata = new Automata<TestState>("Default State");
 
     // states
-    const Idle = automata.State("Idle", () => ({ processing: false }));
-    const Processing = automata.State("Processing", () => ({ processing: true }));
-    const Completed = automata.State<string>("Completed", (_, value) => ({ processing: false, value }));
+    const Idle = automata.state("Idle", () => ({ processing: false }));
+    const Processing = automata.state("Processing", () => ({ processing: true }));
+    const Completed = automata.state<string>("Completed", (_, value) => ({ processing: false, value }));
 
     // actions
-    const StartProcess = automata.Action("Process");
-    const EndProcess = automata.Action<string>("End");
+    const StartProcess = automata.action("Process");
+    const EndProcess = automata.action<string>("End");
 
     let promise: Promise<any>;
     const ProcessData: TransitionMethod = dispatch => {
@@ -25,15 +25,15 @@ describe("Transitions With Promise", () => {
     };
 
     automata
-        .In(Idle)
-            .On(StartProcess)
-                .Execute(ProcessData)
-                .GoTo(Processing)
-        .In(Processing)
-            .On(EndProcess)
-                .GoTo(Completed);
+        .in(Idle)
+            .on(StartProcess)
+                .execute(ProcessData)
+                .goTo(Processing)
+        .in(Processing)
+            .on(EndProcess)
+                .goTo(Completed);
 
-    automata.BeginWith(Idle);
+    automata.beginWith(Idle);
 
     const reducer = automataReducer(automata);
     const store = Redux.createStore(reducer, Redux.applyMiddleware(automataMiddleware));

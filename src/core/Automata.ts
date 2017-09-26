@@ -1,22 +1,21 @@
 import {
     ACTION_TYPE_PREFIEX,
+    ActionDefinition,
     ActionPayload,
     AutomataState,
-    IActionFunction,
-    IGraphObject,
-    IPayloadAction,
-    IStateFunction,
-    IStateMachineOptions,
-    IStateOptions,
+    PayloadAction,
+    StateDefinition,
+    StateFluentOptions,
+    StateMachineOptions,
     TypedReducer
 } from "./common";
-import { IArc, IEdge, INode, StateOptions } from "./options";
+import { Arc, Edge, Node, StateOptions } from "./options";
 
-export class Automata<TState> implements IStateMachineOptions<TState>, IGraphObject<TState> {
-    public Initial: AutomataState<TState>;
-    public Current: AutomataState<TState>;
+export class Automata<TState> implements StateMachineOptions<TState> {
+    public initial: AutomataState<TState>;
+    public current: AutomataState<TState>;
 
-    private states: IStateFunction<TState, ActionPayload>[] = [];
+    private states: StateDefinition<TState, ActionPayload>[] = [];
     private options: StateOptions<TState>[] = [];
 
     /**
@@ -25,7 +24,7 @@ export class Automata<TState> implements IStateMachineOptions<TState>, IGraphObj
     constructor(protected automataName: string) {
     }
 
-    public In(state: IStateFunction<TState, ActionPayload>): IStateOptions<TState> {
+    public in(state: StateDefinition<TState, ActionPayload>): StateFluentOptions<TState> {
         const existingState = this.states.find(_ => _.stateName === state.stateName);
         if (!existingState)
             throw new Error("State should be defined using this.state(...) method.");
@@ -35,26 +34,26 @@ export class Automata<TState> implements IStateMachineOptions<TState>, IGraphObj
         return option;
     }
 
-    public InAny(): IStateOptions<TState> {
+    public inAny(): StateFluentOptions<TState> {
         const option = new StateOptions(this.states.map(_ => _.stateName), this);
         this.options.push(option);
         return option;
     }
 
-    public BeginWith(state: IStateFunction<TState, {}>) {
+    public beginWith(state: StateDefinition<TState, {}>) {
         const existingState = this.states.find(_ => _.stateName === state.stateName);
         if (!existingState)
             throw new Error("State should be previously defined using this.state(...) method.");
 
-        this.Initial = Object.assign(state({} as TState, {}), {
+        this.initial = Object.assign(state({} as TState, {}), {
             __sm_state: existingState.stateName,
             canInvoke: () => false
         });
     }
 
-    public State<TActionPayload extends ActionPayload = undefined>(
+    public state<TActionPayload extends ActionPayload = undefined>(
         name: string,
-        reducer: TypedReducer<TState, TActionPayload>): IStateFunction<TState, TActionPayload> {
+        reducer: TypedReducer<TState, TActionPayload>): StateDefinition<TState, TActionPayload> {
 
         const duplicate = this.states.find(_ => _.stateName === name);
         if (duplicate)
@@ -65,11 +64,11 @@ export class Automata<TState> implements IStateMachineOptions<TState>, IGraphObj
         return newState;
     }
 
-    public Action<TActionPayload extends ActionPayload = undefined>(type: string): IActionFunction<TActionPayload> {
+    public action<TActionPayload extends ActionPayload = undefined>(type: string): ActionDefinition<TActionPayload> {
         const actionType = ACTION_TYPE_PREFIEX + " " + this.automataName + " / " + type;
 
         const func = (payload: TActionPayload) => {
-            const action: IPayloadAction<TActionPayload> = {
+            const action: PayloadAction<TActionPayload> = {
                 payload,
                 type: actionType
             };
@@ -79,13 +78,13 @@ export class Automata<TState> implements IStateMachineOptions<TState>, IGraphObj
         return Object.assign(func, { actionType });
     }
 
-    public getGraph(): INode<TState, ActionPayload>[] {
-        const arcs = this.options.reduce((a, b) => a.concat(b.getArcs()), new Array<IArc<TState>>());
+    public getGraph(): Node<TState, ActionPayload>[] {
+        const arcs = this.options.reduce((a, b) => a.concat(b.getArcs()), new Array<Arc<TState>>());
 
-        return this.states.map<INode<TState, ActionPayload>>(entry => {
+        return this.states.map<Node<TState, ActionPayload>>(entry => {
             let actions = arcs
                 .filter(_ => _.sourceState === entry.stateName)
-                .map<IEdge<TState>>(_ => ({
+                .map<Edge<TState>>(_ => ({
                     actionType: _.actionType,
                     targetState: _.targetState,
                     transitions: _.transitions,
@@ -102,7 +101,7 @@ export class Automata<TState> implements IStateMachineOptions<TState>, IGraphObj
     }
 
     protected mergeState(state: TState): TState {
-        const nextState: TState = Object.assign({}, this.Current, state);
+        const nextState: TState = Object.assign({}, this.current, state);
         return nextState;
     }
 }

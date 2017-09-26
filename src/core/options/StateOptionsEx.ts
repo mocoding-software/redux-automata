@@ -1,22 +1,22 @@
 import {
-    IActionFunction,
-    IActionOptions,
-    IStateFunction,
-    IStateMachineOptions,
-    IStateOptions,
-    IStateOptionsEx,
+    ActionDefinition,
+    ActionFluentOptions,
+    StateDefinition,
+    StateMachineOptions,
+    StateFluentOptions,
+    StateFluetOptionsEx,
 } from "../common";
 
-export class StateOptionsEx<TState> implements IStateOptionsEx<TState> {
+export class StateOptionsEx<TState> implements StateFluetOptionsEx<TState> {
     constructor(
-        private options: IStateMachineOptions<TState>,
-        private stateOptions: IStateOptions<TState>) { }
+        private options: StateMachineOptions<TState>,
+        private stateOptions: StateFluentOptions<TState>) { }
 
-    public In(state: IStateFunction<TState, any>): IStateOptions<TState> {
-        return this.options.In(state);
+    public in(state: StateDefinition<TState, any>): StateFluentOptions<TState> {
+        return this.options.in(state);
     }
 
-    public On<TAction>(actionFunc: IActionFunction<TAction>): IActionOptions<TState, TAction> {
-        return this.stateOptions.On(actionFunc);
+    public on<TAction>(actionFunc: ActionDefinition<TAction>): ActionFluentOptions<TState, TAction> {
+        return this.stateOptions.on(actionFunc);
     }
 }

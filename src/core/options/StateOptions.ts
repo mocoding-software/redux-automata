@@ -1,27 +1,27 @@
-import { IActionFunction, IActionOptions, IStateFunction, IStateMachineOptions, IStateOptions } from "../common";
+import { ActionDefinition, ActionFluentOptions, StateDefinition, StateMachineOptions, StateFluentOptions } from "../common";
 import { ActionOptions } from "./ActionOptions";
-import { IArc, IArcCreator } from "./common";
+import { Arc, ArcCreator } from "./common";
 
-export class StateOptions<TState> implements IStateOptions<TState> {
-    private builders: IArcCreator<TState>[] = [];
+export class StateOptions<TState> implements StateFluentOptions<TState> {
+    private builders: ArcCreator<TState>[] = [];
 
     constructor(
         private sourceStates: string[],
-        private smOptions: IStateMachineOptions<TState>) {
+        private smOptions: StateMachineOptions<TState>) {
     }
 
-    public On<TAction>(action: IActionFunction<TAction>): IActionOptions<TState, TAction> {
+    public on<TAction>(action: ActionDefinition<TAction>): ActionFluentOptions<TState, TAction> {
         const builder = new ActionOptions<TState, TAction>(this.sourceStates, action.actionType, this.smOptions, this);
         this.builders.push(builder);
         return builder;
     }
 
-    public Or(state: IStateFunction<TState, undefined>): IStateOptions<TState> {
+    public or(state: StateDefinition<TState, undefined>): StateFluentOptions<TState> {
         this.sourceStates.push(state.stateName);
         return this;
     }
 
-    public getArcs(): IArc<TState>[] {
-        return this.builders.reduce<IArc<TState>[]>((a, b) => a.concat(b.CreateArcs()), []);
+    public getArcs(): Arc<TState>[] {
+        return this.builders.reduce<Arc<TState>[]>((a, b) => a.concat(b.createArcs()), []);
     }
 }

@@ -1,24 +1,24 @@
 import * as Redux from "redux";
 import { Automata, automataMiddleware, automataReducer } from "../src";
 
-interface ITestState {
+interface TestState {
     value: string;
 }
 
 describe("Simple Transitions", () => {
-    const automata = new Automata<ITestState>("Default State");
+    const automata = new Automata<TestState>("Default State");
 
-    const Idle = automata.State("Idle", () => ({ value: null }));
-    const Active = automata.State<string>("Active", (state, value) => ({ value }));
+    const Idle = automata.state("Idle", () => ({ value: null }));
+    const Active = automata.state<string>("Active", (state, value) => ({ value }));
 
-    const SetMessage = automata.Action<string>("Set Message");
+    const SetMessage = automata.action<string>("Set Message");
 
     automata
-        .In(Idle)
-            .On(SetMessage)
-                .GoTo(Active);
+        .in(Idle)
+            .on(SetMessage)
+                .goTo(Active);
 
-    automata.BeginWith(Idle);
+    automata.beginWith(Idle);
 
     const reducer = automataReducer(automata);
     const store = Redux.createStore(reducer, Redux.applyMiddleware(automataMiddleware));

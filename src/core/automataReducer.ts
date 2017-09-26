@@ -1,27 +1,27 @@
 import * as Redux from "redux";
-import {Automata} from "./Automata";
-import { ActionPayload, AutomataState, IActionFunction, IContextAction, IGraphObject } from "./common";
+import { Automata } from "./Automata";
+import { ActionDefinition, ActionPayload, AutomataAction, AutomataState } from "./common";
 
 export function automataReducer<TState>(automata: Automata<TState>): Redux.Reducer<AutomataState<TState>> {
 
-    if (automata.Initial === undefined)
+    if (automata.initial === undefined)
         throw new Error("No initial state specified. Use BeginWith() method to specify initial state.");
 
-    automata.Current = automata.Initial;
+    automata.current = automata.initial;
 
     const nodes = automata.getGraph();
-    const currentNode = nodes.find(_ => _.entry.stateName ===  automata.Current.__sm_state);
+    const currentNode = nodes.find(_ => _.entry.stateName === automata.current.__sm_state);
 
     if (!currentNode)
         throw new Error("Can't find initial state.");
 
-    automata.Current = Object.assign(automata.Current, {
-        canInvoke: <TAction>(action: IActionFunction<TAction>) =>
+    automata.current = Object.assign(automata.current, {
+        canInvoke: <TAction>(action: ActionDefinition<TAction>) =>
             currentNode.actions.findIndex(_ => _.actionType === action.actionType) > -1
     });
 
     return <TPayload extends ActionPayload = undefined>
-        (state: AutomataState<TState> = automata.Initial, action: IContextAction<TPayload>) => {
+        (state: AutomataState<TState> = automata.initial, action: AutomataAction<TPayload>) => {
         // skip if not state machine;
         if (!action.context)
             return state;
@@ -38,9 +38,9 @@ export function automataReducer<TState>(automata: Automata<TState>): Redux.Reduc
         if (!nextNode)
             throw new Error("Can't find state " + stateAction.targetState);
 
-        automata.Current = state;
+        automata.current = state;
         const nextState = nextNode.entry(state, action.payload);
-        const canInvoke = <TAction>(actionFunc: IActionFunction<TAction>) =>
+        const canInvoke = <TAction>(actionFunc: ActionDefinition<TAction>) =>
             nextNode.actions.findIndex(_ => _.actionType === actionFunc.actionType) > -1;
         const newState: AutomataState<TState> = Object.assign(nextState, {
             __sm_state: nextNode.entry.stateName,

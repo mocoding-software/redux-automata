@@ -1,30 +1,30 @@
 import * as Redux from "redux";
 import { Automata, automataMiddleware, automataReducer } from "../src";
 
-interface ITestState {
+interface TestState {
     value: string;
 }
 
 describe("Switch Transitions", () => {
-    const automata = new Automata<ITestState>("Default State");
+    const automata = new Automata<TestState>("Default State");
 
     // define states
-    const Off = automata.State("Off", () => ({ value: "Switched Off" }));
-    const On = automata.State("On", () => ({ value: "Switched On" }));
+    const Off = automata.state("Off", () => ({ value: "Switched Off" }));
+    const On = automata.state("On", () => ({ value: "Switched On" }));
 
     // define actions
-    const Toggle = automata.Action("Toggle");
+    const Toggle = automata.action("Toggle");
 
     // configure state machine
     automata
-        .In(Off)
-            .On(Toggle)
-                .GoTo(On)
-        .In(On)
-            .On(Toggle)
-                .GoTo(Off);
+        .in(Off)
+            .on(Toggle)
+                .goTo(On)
+        .in(On)
+            .on(Toggle)
+                .goTo(Off);
 
-    automata.BeginWith(Off);
+    automata.beginWith(Off);
 
     const reducer = automataReducer(automata);
     const store = Redux.createStore(reducer, Redux.applyMiddleware(automataMiddleware));
