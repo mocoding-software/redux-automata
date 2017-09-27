@@ -1,3 +1,14 @@
+<div align="center">
+  <a href="https://github.com/mocoding-software/redux-automata">
+    <img src="https://raw.githubusercontent.com/mocoding-software/redux-automata/master/icon.png">
+  </a>
+  <br>
+  <br>
+</div>
+
+[![npm][npm-image]][npm-url]
+[![deps][deps]][deps-url]
+
 # Finite state machine for Redux
 
 redux-automata - is a finite state machine for Redux store. 
@@ -228,3 +239,9 @@ You may use examples to play with and/or improve existing code base.
 Our website: [http://mocoding.com](http://mocoding.com)
 
 Email: [social@mocoding.com](mailto:social@mocoding.com)
+
+[npm-image]: https://img.shields.io/npm/v/redux-automata.svg?style=flat-square
+[npm-url]: https://www.npmjs.com/package/redux-automata
+
+[deps]: https://img.shields.io/david/mocoding-software/redux-automata.svg
+[deps-url]: https://david-dm.org/mocoding-software/redux-automata
