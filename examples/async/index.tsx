@@ -1,12 +1,12 @@
 import * as React from "react";
-import * as Redux from "redux";
 import * as ReactDOM from "react-dom";
+import * as Redux from "redux";
 import { automataMiddleware, automataReducer } from "redux-automata";
 
 import App from "./app";
-import { IResponseState, fetchAutomata } from "./fetch-automata"
+import { fetchAutomata, ResponseState } from "./fetch-automata";
 
-const createLogger = require("redux-logger");
+const createLogger = require("redux-logger").createLogger;
 const AppContainer = require("react-hot-loader").AppContainer;
 
 //constructing store
@@ -15,7 +15,7 @@ const pipeline = Redux.applyMiddleware(
     createLogger()
 );
 const reducer = automataReducer(fetchAutomata);
-const store = Redux.createStore<IResponseState>(reducer, Redux.compose(pipeline));
+const store = Redux.createStore<ResponseState>(reducer, Redux.compose(pipeline));
 
 //run application
 const mount = document.getElementById("app");

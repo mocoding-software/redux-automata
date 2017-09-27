@@ -1,7 +1,7 @@
 import * as Redux from "redux";
-import { Automata } from 'redux-automata';
+import { Automata } from "redux-automata";
 
-export interface IResponseState {
+export interface ResponseState {
     isFetching?: boolean;
     error?: string;
     data?: GithubResposne;
@@ -10,7 +10,7 @@ export interface IResponseState {
 export interface GithubResposne {
     id: number;
     name: string;
-    description: string
+    description: string;
     stargazers_count: number;
     watchers_count: number;
     forks_count: number;
@@ -18,30 +18,30 @@ export interface GithubResposne {
     subscribers_count: number;
 }
 
-const automata = new Automata<IResponseState>("FetchAutomata");
+const automata = new Automata<ResponseState>("FetchAutomata");
 
-//states
-const Idle = automata.State("Idle", () => ({}));
-const Fetching = automata.State("Fetching", () => ({ isFetching: true }));
-const Fetched = automata.State<GithubResposne>("Fetched", (state, data) => ({ data }));
-const FetchingFailed = automata.State<string>("Fetching Calendars Failed", (state, error) => ({ error }));
+// states
+const Idle = automata.state("Idle", () => ({}));
+const Fetching = automata.state("Fetching", () => ({ isFetching: true }));
+const Fetched = automata.state<GithubResposne>("Fetched", (state, data) => ({ data }));
+const FetchingFailed = automata.state<string>("Fetching Calendars Failed", (state, error) => ({ error }));
 
-//actions
-const Fetch = automata.Action('Fetch');
-const Refresh = automata.Action('Refresh');
-const RequestSucceeded = automata.Action<GithubResposne>("Request Succeeded");
-const RequestFailed = automata.Action<string>("Request Failed");
+// actions
+const Fetch = automata.action("Fetch");
+const Refresh = automata.action("Refresh");
+const RequestSucceeded = automata.action<GithubResposne>("Request Succeeded");
+const RequestFailed = automata.action<string>("Request Failed");
 
-//transitions
+// transitions
 const FetchData = (dispatch: Redux.Dispatch<any>) =>
     fetch("https://api.github.com/repos/mocoding-software/redux-automata")
         .then(response => {
             response.text().then(text => {
                 const data = JSON.parse(text);
-                if (response.status == 200) {                               
-                    //dispatch(RequestSucceeded(data));
-                    //small delay to see a loader                    
-                    setTimeout(()=>dispatch(RequestSucceeded(data)), 1000);
+                if (response.status === 200) {
+                    // dispatch(RequestSucceeded(data));
+                    // small delay to see a loader
+                    setTimeout(() => dispatch(RequestSucceeded(data)), 1000);
                 }
                 else
                     dispatch(RequestFailed("Failed to get data from GitHub. Status Code: " + response.status + ". Message: " + data.message));
@@ -50,31 +50,26 @@ const FetchData = (dispatch: Redux.Dispatch<any>) =>
         .catch(_ => dispatch(RequestFailed(JSON.stringify(_))));
 
 automata
-    .In(Idle)
-        .On(Fetch)
-            .Execute(FetchData)
-            .GoTo(Fetching)
-    .In(Fetching)
-        .On(RequestSucceeded)
-            .GoTo(Fetched)
-        .On(RequestFailed)
-            .GoTo(FetchingFailed)
-    .In(FetchingFailed)
-        .On(Fetch)
-            .Execute(FetchData)
-            .GoTo(Fetching)
-        .On(Refresh)
-            .Execute(FetchData)
-            .GoTo(Fetching)
-    .In(Fetched)
-        .On(Refresh)
-            .Execute(FetchData)
-            .GoTo(Fetching)
+    .in(Idle)
+    .or(FetchingFailed)
+        .on(Fetch)
+            .execute(FetchData)
+            .goTo(Fetching)
+    .in(Fetching)
+        .on(RequestSucceeded)
+            .goTo(Fetched)
+        .on(RequestFailed)
+            .goTo(FetchingFailed)
+    .in(FetchingFailed)
+    .or(Fetched)
+        .on(Refresh)
+            .execute(FetchData)
+            .goTo(Fetching);
 
-automata.BeginWith(Idle);
+automata.beginWith(Idle);
 
 export {
     automata as fetchAutomata,
     Fetch,
     Refresh
-}
+};

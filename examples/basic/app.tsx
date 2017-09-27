@@ -1,15 +1,15 @@
-import * as React from 'react';
-import * as Redux from 'redux';
+import * as React from "react";
 import { Provider } from "react-redux";
+import * as Redux from "redux";
 
-import { IState } from './basic-automata';
-import View from './view';
+import { State } from "./basic-automata";
+import View from "./view";
 
-interface IAppProps {
-    store: Redux.Store<IState>;
+interface AppProps {
+    store: Redux.Store<State>;
 }
 
-export default class App extends React.Component<IAppProps, {}> {
+export default class App extends React.Component<AppProps, {}> {
     public render(): JSX.Element {
         return (
             <Provider store={this.props.store} key="provider">
@@ -18,4 +18,3 @@ export default class App extends React.Component<IAppProps, {}> {
         );
     }
 }
-

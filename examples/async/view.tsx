@@ -1,21 +1,20 @@
-import { } from '../../src';
-import * as Redux from 'redux';
 import * as React from "react";
-import { Alert, ProgressBar, Well, Button, Badge, Glyphicon, Col, Row } from "react-bootstrap";
-import { IResponseState, Fetch, Refresh } from './fetch-automata';
-import { ICanInvokeCapabilities } from 'redux-automata';
+import { Alert, Badge, Button, Col, Glyphicon, ProgressBar, Row, Well } from "react-bootstrap";
+import * as Redux from "redux";
+import { CanInvokeCapabilities } from "redux-automata";
+import { Fetch, Refresh, ResponseState } from "./fetch-automata";
 
-const { connect } = require('react-redux');
+const { connect } = require("react-redux");
 
-interface IViewProps {
-    response?: IResponseState;
+interface ViewProps {
+    response?: ResponseState;
     canRefresh?: boolean;
     load?: () => void;
     refresh?: () => void;
 }
 
 @connect(
-    (state: IResponseState & ICanInvokeCapabilities) => ({
+    (state: ResponseState & CanInvokeCapabilities) => ({
         response: state,
         canRefresh: state.canInvoke(Refresh)
     }),
@@ -24,19 +23,19 @@ interface IViewProps {
         refresh: () => dispatch(Refresh(null)),
     })
 )
-class View extends React.Component<IViewProps, {}> {
+class View extends React.Component<ViewProps, {}> {
 
-    componentWillMount() {
+    public componentWillMount() {
         this.props.load();
     }
 
     public render(): JSX.Element {
-        const {response} = this.props
+        const { response } = this.props;
         const isFetching = response.isFetching || (!response.data && !response.error);
 
         const body = isFetching
             ? this.onRenderLoading()
-            : (response.error ? this.onRenderError() : this.onRenderData())
+            : (response.error ? this.onRenderError() : this.onRenderData());
 
         return (
             <div>
@@ -51,13 +50,13 @@ class View extends React.Component<IViewProps, {}> {
                         <p>This button is disabled depending on availability of specific actions on current state.</p>
                         <Button bsStyle="success" disabled={!this.props.canRefresh} onClick={this.props.refresh}>Refresh</Button>
                     </Well>
-                </div>                
+                </div>
             </div>
         )
     }
 
     onRenderError(): JSX.Element {
-        var {error} = this.props.response;
+        let { error } = this.props.response;
         return (
             <Alert bsStyle="danger">
                 <h4>Request failed!</h4>
@@ -67,12 +66,12 @@ class View extends React.Component<IViewProps, {}> {
 
     }
 
-    onRenderLoading(): JSX.Element {
+    public onRenderLoading(): JSX.Element {
         return <ProgressBar active now={100} />
     }
 
-    onRenderData(): JSX.Element {
-        const { data } = this.props.response;        
+    public onRenderData(): JSX.Element {
+        const { data } = this.props.response;
         return <Well bsSize="large">
             <Row>
                 <Col sm={12}>
@@ -84,7 +83,7 @@ class View extends React.Component<IViewProps, {}> {
                     <h3>{data.description}</h3>
                 </Col>
             </Row>
-            <br />            
+            <br />
             <Row style={{ "text-align": "center" }}>
                 <Col xs={4}>
                     <Glyphicon glyph="eye-open" /> Watchers <Badge>{data.watchers_count}</Badge>
@@ -96,7 +95,7 @@ class View extends React.Component<IViewProps, {}> {
                     <Glyphicon glyph="random" /> Forks <Badge>{data.forks_count}</Badge>
                 </Col>
             </Row>
-        </Well>
+        </Well>;
     }
 }
 

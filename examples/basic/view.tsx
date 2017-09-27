@@ -1,22 +1,21 @@
-import { } from '../../src';
-import * as Redux from 'redux';
 import * as React from "react";
-import { Alert, ProgressBar, Well, Button, Badge, Glyphicon, Col, Row } from "react-bootstrap";
-import { IState, Toggle } from './basic-automata';
-import { ICanInvokeCapabilities } from 'redux-automata';
+import { Alert, Badge, Button, Col, Glyphicon, ProgressBar, Row, Well } from "react-bootstrap";
+import * as Redux from "redux";
+import { CanInvokeCapabilities } from "redux-automata";
+import { State, Toggle } from "./basic-automata";
 
-const { connect } = require('react-redux');
+const { connect } = newFunction();
 
-interface IViewProps {
-    switcher?: IState;
+interface ViewProps {
+    switcher?: State;
     toggle?: () => void;
 }
 
 @connect(
-    (state: IState) => ({ switcher: state }),
+    (state: State) => ({ switcher: state }),
     (dispatch: Redux.Dispatch<any>) => ({ toggle: () => dispatch(Toggle(null)) })
 )
-class View extends React.Component<IViewProps, {}> {
+class View extends React.Component<ViewProps, {}> {
     public render(): JSX.Element {
         return (
             <div>
@@ -27,8 +26,12 @@ class View extends React.Component<IViewProps, {}> {
                     </Well>
                 </div>
             </div>
-        )
+        );
     }
 }
 
 export default View;
+function newFunction(): { connect: any; } {
+    return require("react-redux");
+}
+

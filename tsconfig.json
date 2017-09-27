@@ -6,14 +6,18 @@
 		"noImplicitAny": true,		
 		"moduleResolution": "node",
 		"emitDecoratorMetadata": true,
-		"sourceMap": false,
+		"sourceMap": true,
 		"declaration": true,
 		"outDir": "typings",
 		"baseUrl": "./src",
-		"removeComments": true,
-		"types": [
-			"node", "es6-shim"
-		]
+        "removeComments": true,
+        "strict": true,
+        "lib": [
+            "es6"            
+        ],
+        "types":[
+            "node", "jest"
+        ]
 	},
 	"files": [
 		"src/index.ts"
