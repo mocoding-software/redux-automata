@@ -40,12 +40,12 @@ export class Automata<TState> implements StateMachineOptions<TState> {
         return option;
     }
 
-    public beginWith(state: StateDefinition<TState, {}>) {
+    public beginWith(state: StateDefinition<TState>) {
         const existingState = this.states.find(_ => _.stateName === state.stateName);
         if (!existingState)
             throw new Error("State should be previously defined using this.state(...) method.");
 
-        this.initial = Object.assign(state({} as TState, {}), {
+        this.initial = Object.assign(state({} as TState, undefined), {
             __sm_state: existingState.stateName,
             canInvoke: () => false
         });

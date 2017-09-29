@@ -5,7 +5,7 @@ interface TestState {
     value: string;
 }
 
-describe("Absolute Transitions", () => {
+describe("Any Transitions", () => {
     const automata = new Automata<TestState>("Default State");
 
     const Idle = automata.state("Idle", () => ({ value: null }));

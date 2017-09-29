@@ -1,4 +1,12 @@
-import { ActionDefinition, ActionFluentOptions, StateDefinition, StateMachineOptions, StateFluentOptions } from "../common";
+import {
+    ActionDefinition,
+    ActionFluentOptions,
+    ActionPayload,
+    StateDefinition,
+    StateFluentOptions,
+    StateMachineOptions
+} from "../common";
+
 import { ActionOptions } from "./ActionOptions";
 import { Arc, ArcCreator } from "./common";
 
@@ -16,7 +24,7 @@ export class StateOptions<TState> implements StateFluentOptions<TState> {
         return builder;
     }
 
-    public or(state: StateDefinition<TState, undefined>): StateFluentOptions<TState> {
+    public or<TPayload extends ActionPayload>(state: StateDefinition<TState, TPayload>): StateFluentOptions<TState> {
         this.sourceStates.push(state.stateName);
         return this;
     }

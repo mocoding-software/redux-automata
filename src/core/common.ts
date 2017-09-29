@@ -61,13 +61,13 @@ export type TransitionMethod<TPayload extends ActionPayload = undefined>
     = (dispatch: Redux.Dispatch<any>, arg: TPayload) => void;
 
 export interface StateMachineOptions<TState> {
-    in(state: StateDefinition<TState>): StateFluentOptions<TState>;
+    in<TPayload extends ActionPayload>(state: StateDefinition<TState, TPayload>): StateFluentOptions<TState>;
     inAny(): StateFluentOptions<TState>;
 }
 
 export interface StateFluentOptions<TState> {
     on<TPayload extends ActionPayload>(action: ActionDefinition<TPayload>): ActionFluentOptions<TState, TPayload>;
-    or(state: StateDefinition<TState>): StateFluentOptions<TState>;
+    or<TPayload extends ActionPayload>(state: StateDefinition<TState, TPayload>): StateFluentOptions<TState>;
 }
 
 export interface ActionFluentOptions<TState, TPayload extends ActionPayload> {
@@ -76,6 +76,6 @@ export interface ActionFluentOptions<TState, TPayload extends ActionPayload> {
 }
 
 export interface StateFluetOptionsEx<TState> {
-    in(state: StateDefinition<TState>): StateFluentOptions<TState>;
+    in<TPayload extends ActionPayload>(state: StateDefinition<TState, TPayload>): StateFluentOptions<TState>;
     on<TPayload extends ActionPayload>(action: ActionDefinition<TPayload>): ActionFluentOptions<TState, TPayload>;
  }
