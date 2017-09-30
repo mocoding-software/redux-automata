@@ -8,11 +8,11 @@ interface Data {
 describe("Shortcut Test", () => {
     const promise = new Promise<Data>((ok, cancel) => setTimeout(() => ok({ message: "Expected Message" }), 200));
     const task = () => promise;
-    const automation = createTaskAtuomation<Data>("Get Data", task);
-    const store = Redux.createStore(automation.reducer, Redux.applyMiddleware(automataMiddleware));
+    const getDataAutomation = createTaskAtuomation<Data>("Get Data", task);
+    const store = Redux.createStore(getDataAutomation.reducer, Redux.applyMiddleware(automataMiddleware));
 
     test("Start Process", () => {
-        store.dispatch(automation.start());
+        store.dispatch(getDataAutomation.start());
 
         const currentState = store.getState();
         expect(currentState.isProcessing).toBeTruthy();

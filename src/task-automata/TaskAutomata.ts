@@ -1,5 +1,5 @@
 import * as Redux from "redux";
-import { ActionDefinition, Automata, PayloadAction, StateDefinition } from "../core";
+import { ActionDefinition, ActionPayload, Automata, PayloadAction, StateDefinition, TransitionMethod } from "../core";
 import { Task, TaskComplete, TaskState } from "./common";
 
 export class TaskAutomata<
@@ -15,10 +15,14 @@ export class TaskAutomata<
     public Failure: StateDefinition<TState, TError>;
 
     // actions
-    public Start: ActionDefinition<TInput>;
-    public Cancel: ActionDefinition;
+    public Start: ActionDefinition<TInput>; // start process if it was not already started.
+    public Restart: ActionDefinition<TInput>; // restart process when it was started at least once
+    public Cancel: ActionDefinition; // cancel processing task
     public End: ActionDefinition<TResult>;
     public Fail: ActionDefinition<TError>;
+
+        // transitions
+    public BeginProcessing: TransitionMethod<TInput>;
 
     /**
      *
@@ -53,9 +57,25 @@ export class TaskAutomata<
             } as TState));
 
         this.Start = this.action<TInput>(this.Name + " Start");
+        this.Restart = this.action<TInput>(this.Name + " Restart");
         this.Cancel = this.action(this.Name + " Cancel");
         this.End = this.action<TResult>(this.Name + " Success");
         this.Fail = this.action<TError>(this.Name + " Fail");
+
+        this.BeginProcessing = (dispatch, input) =>
+            this.Process(input)
+                .then(_ => {
+                    const result = dispatch(this.End(_));
+                    if (this.OnSuccess)
+                        this.OnSuccess(dispatch, _, input);
+                    return result;
+                })
+                .catch(_ => {
+                    const result = dispatch(this.Fail(_));
+                    if (this.OnFailure)
+                        this.OnFailure(dispatch, _, input);
+                    return result;
+                });
     }
 
     public setupProcessIn(state: StateDefinition<TState>) {
@@ -67,6 +87,7 @@ export class TaskAutomata<
             Failure,
 
             Start,
+            Restart,
             End,
             Fail,
             Cancel,
@@ -75,7 +96,6 @@ export class TaskAutomata<
         } = this;
 
         this.in(state)
-            .or(Failure)
                 .on(Start)
                     .execute(BeginProcessing)
                     .goTo(Processing)
@@ -84,26 +104,17 @@ export class TaskAutomata<
                     .goTo(Completed)
                 .on(Fail)
                     .goTo(Failure)
+                .on(Cancel)
+                    .goTo(Idle)
             .in(Failure)
                 .on(Cancel)
-                    .goTo(Idle);
+                    .goTo(Idle)
+            .in(Completed)
+            .or(Failure)
+                .on(Restart)
+                    .execute(BeginProcessing)
+                    .goTo(Processing);
     }
-
-    // transitions
-    protected BeginProcessing = (dispatch: Redux.Dispatch<any>, input: TInput) =>
-        this.Process(input)
-            .then(_ => {
-                const result = dispatch(this.End(_));
-                if (this.OnSuccess)
-                    this.OnSuccess(dispatch, _, input);
-                return result;
-            })
-            .catch(_ => {
-                const result = dispatch(this.Fail(_));
-                if (this.OnFailure)
-                    this.OnFailure(dispatch, _, input);
-                return result;
-            })
 
     protected getDefaultState(): TState {
         return ({ isProcessing: false }) as TState;
