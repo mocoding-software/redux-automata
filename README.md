@@ -319,3 +319,10 @@ Email: [social@mocoding.com](mailto:social@mocoding.com)
 
 [deps]: https://img.shields.io/david/mocoding-software/redux-automata.svg
 [deps-url]: https://david-dm.org/mocoding-software/redux-automata
+
+License
+=======
+
+[The MIT License](https://raw.githubusercontent.com/mocoding-software/redux-automata/master/LICENSE)
+
+COPYRIGHT (C) 2017 MOCODING, LLC
