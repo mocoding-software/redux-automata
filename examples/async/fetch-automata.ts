@@ -24,7 +24,7 @@ const automata = new Automata<ResponseState>("FetchAutomata");
 const Idle = automata.state("Idle", () => ({}));
 const Fetching = automata.state("Fetching", () => ({ isFetching: true }));
 const Fetched = automata.state<GithubResposne>("Fetched", (state, data) => ({ data }));
-const FetchingFailed = automata.state<string>("Fetching Calendars Failed", (state, error) => ({ error }));
+const FetchingFailed = automata.state<string>("Failed", (state, error) => ({ error }));
 
 // actions
 const Fetch = automata.action("Fetch");

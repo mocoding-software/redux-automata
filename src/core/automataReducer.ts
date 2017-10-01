@@ -47,6 +47,8 @@ export function automataReducer<TState>(automata: Automata<TState>): Redux.Reduc
             canInvoke
         });
 
+        automata.current = newState;
+
         stateAction.transitions.forEach(transition =>
             transition(action.context.dispatch, action.payload));
 

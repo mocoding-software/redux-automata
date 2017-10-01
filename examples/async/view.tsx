@@ -2,7 +2,9 @@ import * as React from "react";
 import { Alert, Badge, Button, Col, Glyphicon, ProgressBar, Row, Well } from "react-bootstrap";
 import * as Redux from "redux";
 import { CanInvokeCapabilities } from "redux-automata";
-import { Fetch, Refresh, ResponseState } from "./fetch-automata";
+import { Statechart } from "../basic/Statechart";
+import { Fetch, Refresh, ResponseState, fetchAutomata } from "./fetch-automata";
+import { Grid } from "react-bootstrap";
 
 const { connect } = require("react-redux");
 
@@ -38,20 +40,28 @@ class View extends React.Component<ViewProps, {}> {
             : (response.error ? this.onRenderError() : this.onRenderData());
 
         return (
-            <div>
-                <div className="container">
-                    <Well bsSize="large">
-                        <h1>Redux Automata - Fetch Example</h1>
-                        <p>This example shows fetching remote data from server. We are fetching data from GitHub.</p>
-                        {body}
-                        <p>This button stays enabled all the time. So nothing prevents you from clicking on it several times. But since Refresh is not availible in Fetching state - nothing happens.</p>
-                        <Button bsStyle="primary" onClick={this.props.refresh}>Refresh</Button>
-                        <br />
-                        <p>This button is disabled depending on availability of specific actions on current state.</p>
-                        <Button bsStyle="success" disabled={!this.props.canRefresh} onClick={this.props.refresh}>Refresh</Button>
-                    </Well>
-                </div>
-            </div>
+            <Grid fluid>
+                <Row>
+                    <Col md={6}>
+                        <Well bsSize="large">
+                            <h1>Redux Automata - Fetch Example</h1>
+                            <p>This example shows fetching remote data from server. We are fetching data from GitHub.</p>
+                            {body}
+                            <p>This button stays enabled all the time. So nothing prevents you from clicking on it several times. But since Refresh is not availible in Fetching state - nothing happens.</p>
+                            <Button bsStyle="primary" onClick={this.props.refresh}>Refresh</Button>
+                            <br />
+                            <p>This button is disabled depending on availability of specific actions on current state.</p>
+                            <Button bsStyle="success" disabled={!this.props.canRefresh} onClick={this.props.refresh}>Refresh</Button>
+                        </Well>
+                    </Col>
+                    <Col md={6}>
+                        <Well bsSize="large">
+                            <h1>Statechart</h1>
+                            <Statechart automata={fetchAutomata} />
+                        </Well>
+                    </Col>
+                </Row>
+            </Grid>
         )
     }
 

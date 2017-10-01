@@ -2,7 +2,8 @@ import * as React from "react";
 import { Alert, Badge, Button, Col, Glyphicon, ProgressBar, Row, Well } from "react-bootstrap";
 import * as Redux from "redux";
 import { CanInvokeCapabilities } from "redux-automata";
-import { State, Toggle } from "./basic-automata";
+import { basicAutomata, State, Toggle } from "./basic-automata";
+import { Statechart } from "./Statechart";
 
 const { connect } = newFunction();
 
@@ -23,6 +24,10 @@ class View extends React.Component<ViewProps, {}> {
                     <Well bsSize="large">
                         <h1>{this.props.switcher ? this.props.switcher.message : ""}</h1>
                         <Button bsStyle="success" onClick={this.props.toggle}>Toggle</Button>
+                    </Well>
+                    <Well bsSize="large">
+                        <h1>Statechart</h1>
+                        <Statechart automata={basicAutomata} />
                     </Well>
                 </div>
             </div>

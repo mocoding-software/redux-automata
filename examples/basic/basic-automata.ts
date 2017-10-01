@@ -24,6 +24,7 @@ automata.beginWith(Off);
 
 const reducer = automataReducer(automata);
 export {
+    automata as basicAutomata,
     reducer,
     Toggle
 }
