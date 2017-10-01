@@ -19,6 +19,8 @@ The library was developed to support the following scenarios:
 
 ## Example 
 
+ <img src="https://github.com/mocoding-software/redux-automata/raw/master/examples/res/switch.png" width="50%" style="margin: 0 auto">
+
 The following example is written on Typescript but you can use Javascript as well:
 
 ```typescript
@@ -256,3 +258,6 @@ Email: [social@mocoding.com](mailto:social@mocoding.com)
 
 [deps]: https://img.shields.io/david/mocoding-software/redux-automata.svg
 [deps-url]: https://david-dm.org/mocoding-software/redux-automata
+
+[switch-image]: https://github.com/mocoding-software/redux-automata/raw/master/examples/res/switch.png 
+[fetch-image]: https://github.com/mocoding-software/redux-automata/raw/master/examples/res/fetch.png
