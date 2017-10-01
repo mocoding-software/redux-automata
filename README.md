@@ -11,8 +11,7 @@
 
 # Finite state machine for Redux
 
-redux-automata - is a finite state machine for Redux store. 
-It allows developer to configure finite state machine and generate reducer automatically based on graph object produced. 
+redux-automata - is a Finite State Machine implementation for Redux store. It allows developer to generate Redux reducer automatically based on FST graph object. 
 The library was developed to support the following scenarios:
 * Provide different behavoiur for the same action depending on current state
 * Ignore specific actions while in specific states (or better saying - process actions only in specific states)
@@ -33,11 +32,11 @@ export interface State{
 const automata = new Automata<State>("Counter");
 
 // define states
-const Off = automata.State("Off", () => ({ message: "Switched Off" }));
-const On = automata.State("On", () => ({ message: "Switched On" }));
+const Off = automata.state("Off", () => ({ message: "Switched Off" }));
+const On = automata.state("On", () => ({ message: "Switched On" }));
 
 // define actions
-const Toggle = automata.Action("Toggle");
+const Toggle = automata.action("Toggle");
 
 // configure state machine
 automata
@@ -101,7 +100,9 @@ export {
 }
 ```
 
-## Usage Details
+## Implemenation & Usage Details
+
+The library defines each state as seperate reducer function that accepts typed argument. The typed argument is dfined by action that leads to that states. 
 
 Redux Automata allows configuring state and actions in declrative way. 
 Every state is a reducer function that will be executed on entry. 
@@ -122,7 +123,14 @@ Defining the state is absolutely the same on how reducer is defined. In addition
     // returns state with message set to arg
     const MessageSet = automata.state("Message is set", (state, arg) => ({ message: arg });
     // returns state with existing message value and new value for property count.
-    const CountSet = automata.state("Count is set", (state, arg) => ({ message: state.message, count: arg });
+    const CountSet = automata.state("Count is set", (state, arg) => ({ message: state.message, count: arg })
+
+    /*
+        interface State {
+            message?: string;
+            count?: number;
+        }
+    */
 ```
 
 ### Creating Actions
@@ -231,8 +239,11 @@ Every example static content is served from http://localhost:3000 with hot reloa
 ## Contributions
 
 All source code is located in ```src``` folder.
-All tests located in ```test``` folder.
-You may use examples to play with and/or improve existing code base.
+All tests are located in ```test``` folder.
+
+## Credits
+
+The library was inspired by [appccelerate/statemachine](https://github.com/appccelerate/statemachine).
 
 ## Contact Us
 
