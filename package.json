@@ -1,6 +1,6 @@
 {
     "name": "redux-automata",
-    "version": "2.0.0-beta5",
+    "version": "2.0.0",
     "description": "Finite state automata for Redux.",
     "main": "./dist/redux-automata.min.js",
     "typings": "./dist/typings/index.d.ts",
@@ -19,7 +19,10 @@
         "state machine",
         "state",
         "redux actions",
-        "predictable state"
+        "predictable state",
+        "statechart",
+        "finite state machine",
+        "fsm"
     ],
     "author": "MOCODING, LLC",
     "license": "MIT",

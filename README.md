@@ -17,6 +17,17 @@ The library was developed to support the following scenarios:
 * Ignore specific actions while in specific states (or better saying - process actions only in specific states)
 * Use declarative approach for defining actions, states and transitions instead of switch-case and if-then-else
 
+## Installation
+
+```
+npm i redux-automata --save
+```
+or
+
+```
+yarn add redux-automata
+```
+
 ## Example 
 
 <img src="https://github.com/mocoding-software/redux-automata/raw/master/examples/res/switch.png" width="50%" />
@@ -213,7 +224,7 @@ interface ViewProps {
         canRefresh: state.canInvoke(Refresh)
     }),
     (dispatch: Redux.Dispatch<any>) => ({        
-        refresh: () => dispatch(Refresh(null)),
+        refresh: () => dispatch(Refresh()),
     })
 )
 
@@ -222,6 +233,55 @@ interface ViewProps {
 ```
 
 Then Refresh button may be hidden depending on ```canRefresh``` flag.
+
+## Task Automation
+
+Along with ```Automata``` there is a ```TaskAutomata```. ```TaskAutomata``` is aimed to be used with common async operations like fetching data froms server.
+
+```ts
+
+    // reducer
+    function fetchDataFromServer() : Promise<Data>{
+        ...
+    }
+
+    const automata = new TaskAutomata<Data>("Fetch Data", fetchDataFromServer);
+    automata.setupProcessIn(automata.Idle);
+    automata.beginWith(automata.Idle);
+
+    export const getDataReducer = automataReducer(automata);
+    export const LoadData = automata.Start;
+    export const RefreshData = automata.Restart;
+
+    ...    
+
+    // view
+    interface ViewProps {
+        result?: TaskState<Data>;
+        isProcessing: boolean;
+        error: Error;
+        load?: () => void;
+        refresh?: () => void;
+    }
+
+    @connect(
+        state => ({
+            result?: state.getData.result
+            isProcessing: state.getData.isProcessing;
+            error: state.getData.error
+        }),
+        (dispatch: Redux.Dispatch<any>) => ({        
+            load: () => dispatch(LoadData()),
+            refresh: () => dispatch(RefreshData()),
+        })
+    )
+    ...
+
+```
+
+This will configure finite automation similar to image below:
+
+<img src="https://github.com/mocoding-software/redux-automata/raw/master/examples/res/task.png" width="50%" />
 
 ## Example code
 All examples code are located in ```examples``` folder
