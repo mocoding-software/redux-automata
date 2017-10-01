@@ -7,7 +7,7 @@ export interface TaskAtuomation
     <TResult,
     TInput = undefined,
     TError extends Error = Error,
-    TState extends TaskState<TResult, TError> = TaskState<TResult, TError>> {        
+    TState extends TaskState<TResult, TError> = TaskState<TResult, TError>> {
         reducer: Redux.Reducer<AutomataState<TState>>;
         start: ActionDefinition<TInput>;
         restart: ActionDefinition<TInput>;
@@ -24,7 +24,7 @@ export function createTaskAtuomation<
         onSuccess?: TaskComplete<TResult, TInput>,
         onFailure?: TaskComplete<TError, TInput>): TaskAtuomation<TResult, TInput, TError, TState> {
 
-    const automata = new TaskAutomata<TResult, TInput, TError, TState>(dataName, processTask, onSuccess, onFailure);    
+    const automata = new TaskAutomata<TResult, TInput, TError, TState>(dataName, processTask, onSuccess, onFailure);
     automata.setupProcessIn(automata.Idle);
     automata.beginWith(automata.Idle);
 

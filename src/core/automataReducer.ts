@@ -1,6 +1,6 @@
 import * as Redux from "redux";
 import { Automata } from "./Automata";
-import { ActionDefinition, ActionPayload, AutomataAction, AutomataState } from "./common";
+import {ACTION_TYPE_PREFIEX, ActionDefinition,  ActionPayload,  AutomataAction,  AutomataState} from "./common";
 
 export function automataReducer<TState>(automata: Automata<TState>): Redux.Reducer<AutomataState<TState>> {
 
@@ -23,7 +23,7 @@ export function automataReducer<TState>(automata: Automata<TState>): Redux.Reduc
     return <TPayload extends ActionPayload = undefined>
         (state: AutomataState<TState> = automata.initial, action: AutomataAction<TPayload>) => {
         // skip if not state machine;
-        if (!action.context)
+        if (typeof action.type !== "string" || !action.type.startsWith(ACTION_TYPE_PREFIEX))
             return state;
 
         const node = nodes.find(_ => _.entry.stateName === state.__sm_state);
@@ -46,11 +46,10 @@ export function automataReducer<TState>(automata: Automata<TState>): Redux.Reduc
             __sm_state: nextNode.entry.stateName,
             canInvoke
         });
-
         automata.current = newState;
 
         stateAction.transitions.forEach(transition =>
-            transition(action.context.dispatch, action.payload));
+            transition(action.dispatch, action.payload));
 
         return newState;
     };

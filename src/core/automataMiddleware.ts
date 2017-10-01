@@ -10,14 +10,12 @@ export function automataMiddleware<S>(api: Redux.MiddlewareAPI<S>): (next: Redux
             let dispatching = true;
 
             const smAction: AutomataAction<ActionPayload> = Object.assign(action, {
-                context: {
-                    dispatch: <DispatchedAction extends Redux.Action>(a: DispatchedAction): DispatchedAction => {
-                        if (dispatching)
-                            setTimeout(() => api.dispatch(a), 0);
-                        else
-                            return api.dispatch(a);
-                        return a;
-                    }
+                dispatch: <DispatchedAction extends Redux.Action>(a: DispatchedAction): DispatchedAction => {
+                    if (dispatching)
+                        setTimeout(() => api.dispatch(a), 0);
+                    else
+                        return api.dispatch(a);
+                    return a;
                 }
             });
 

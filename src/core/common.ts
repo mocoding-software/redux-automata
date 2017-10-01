@@ -24,13 +24,9 @@ export interface PayloadAction<TPayload extends ActionPayload = undefined> exten
 }
 
 /**
- * Action with context to be processed by automata reducer.
+ * Action with dispatch to be processed by automata reducer.
  */
 export interface AutomataAction<TPayload extends ActionPayload = undefined> extends PayloadAction<TPayload> {
-    context: ActionContext;
-}
-
-export interface ActionContext {
     dispatch: Redux.Dispatch<any>;
 }
 
