@@ -19,7 +19,8 @@ The library was developed to support the following scenarios:
 
 ## Example 
 
- <img src="https://github.com/mocoding-software/redux-automata/raw/master/examples/res/switch.png" width="50%" style="margin: 0 auto">
+<img src="https://github.com/mocoding-software/redux-automata/raw/master/examples/res/switch.png" width="50%" />
+
 
 The following example is written on Typescript but you can use Javascript as well:
 
@@ -152,7 +153,7 @@ Transition is a function that executed when switching from one state to another.
 Main purpose of transitions is to execute async operations. 
 Here is a good example of fetching data from server:
 
-#### Examples
+<img src="https://github.com/mocoding-software/redux-automata/raw/master/examples/res/fetch.png" width="50%" />
 
 ```typescript
 
@@ -258,6 +259,3 @@ Email: [social@mocoding.com](mailto:social@mocoding.com)
 
 [deps]: https://img.shields.io/david/mocoding-software/redux-automata.svg
 [deps-url]: https://david-dm.org/mocoding-software/redux-automata
-
-[switch-image]: https://github.com/mocoding-software/redux-automata/raw/master/examples/res/switch.png 
-[fetch-image]: https://github.com/mocoding-software/redux-automata/raw/master/examples/res/fetch.png
