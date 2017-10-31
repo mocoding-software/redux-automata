@@ -3,7 +3,7 @@ import { ActionDefinition, automataReducer, AutomataState } from "../core";
 import { Task, TaskComplete, TaskState } from "./common";
 import { TaskAutomata } from "./TaskAutomata";
 
-export interface TaskAtuomation
+export interface TaskAutomation
     <TResult,
     TInput = undefined,
     TError extends Error = Error,
@@ -14,7 +14,7 @@ export interface TaskAtuomation
         cancel: ActionDefinition;
 }
 
-export function createTaskAtuomation<
+export function createTaskAutomation<
     TResult,
     TInput = undefined,
     TError extends Error = Error,
@@ -22,7 +22,7 @@ export function createTaskAtuomation<
         dataName: string,
         processTask: Task<TResult, TInput>,
         onSuccess?: TaskComplete<TResult, TInput>,
-        onFailure?: TaskComplete<TError, TInput>): TaskAtuomation<TResult, TInput, TError, TState> {
+        onFailure?: TaskComplete<TError, TInput>): TaskAutomation<TResult, TInput, TError, TState> {
 
     const automata = new TaskAutomata<TResult, TInput, TError, TState>(dataName, processTask, onSuccess, onFailure);
     automata.setupProcessIn(automata.Idle);
@@ -35,5 +35,5 @@ export function createTaskAtuomation<
         reducer,
         restart: automata.Restart,
         start: automata.Start,
-    }
+    };
 }

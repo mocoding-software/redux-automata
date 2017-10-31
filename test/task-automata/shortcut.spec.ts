@@ -1,5 +1,5 @@
 import * as Redux from "redux";
-import { Automata, automataMiddleware, automataReducer, createTaskAtuomation } from "../../src";
+import { Automata, automataMiddleware, automataReducer, createTaskAutomation } from "../../src";
 
 interface Data {
     message: string;
@@ -8,7 +8,7 @@ interface Data {
 describe("Shortcut Test", () => {
     const promise = new Promise<Data>((ok, cancel) => setTimeout(() => ok({ message: "Expected Message" }), 200));
     const task = () => promise;
-    const getDataAutomation = createTaskAtuomation<Data>("Get Data", task);
+    const getDataAutomation = createTaskAutomation<Data>("Get Data", task);
     const store = Redux.createStore(getDataAutomation.reducer, Redux.applyMiddleware(automataMiddleware));
 
     test("Start Process", () => {
