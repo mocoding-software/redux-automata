@@ -10,6 +10,7 @@ describe("Absolute Transitions", () => {
 
     const Idle = automata.state("Idle", () => ({ value: null }));
     const Active = automata.state<string>("Active", (state, value) => ({ value }));
+    const Other = automata.state<number>("Other", (state, value) => ({ value: value.toString() }));
 
     const SetMessage = automata.action<string>("Set Message");
     const Cancel = automata.action("Cancel");
@@ -17,6 +18,7 @@ describe("Absolute Transitions", () => {
     automata
         .in(Idle)
         .or(Active)
+        .or(Other)
             .on(SetMessage)
                 .goTo(Active)
         .in(Active)

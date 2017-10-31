@@ -2,7 +2,7 @@ import * as Redux from "redux";
 
 export type AutomataState<TState> = TState & { __sm_state: string | undefined } & CanInvokeCapabilities;
 
-export const ACTION_TYPE_PREFIEX = "@@AUTOMATA";
+export const ACTION_TYPE_PREFIX = "@@AUTOMATA";
 
 /**
  * Payload type
@@ -67,11 +67,12 @@ export interface StateFluentOptions<TState> {
 }
 
 export interface ActionFluentOptions<TState, TPayload extends ActionPayload> {
-    goTo(state: StateDefinition<TState, TPayload>): StateFluetOptionsEx<TState>;
+    goTo(state: StateDefinition<TState, TPayload>): StateFluentOptionsEx<TState>;
     execute(transition: TransitionMethod<TPayload>): ActionFluentOptions<TState, TPayload>;
+    noop(): StateFluentOptionsEx<TState>;
 }
 
-export interface StateFluetOptionsEx<TState> {
+export interface StateFluentOptionsEx<TState> {
     in<TPayload extends ActionPayload>(state: StateDefinition<TState, TPayload>): StateFluentOptions<TState>;
     on<TPayload extends ActionPayload>(action: ActionDefinition<TPayload>): ActionFluentOptions<TState, TPayload>;
  }

@@ -1,6 +1,6 @@
 import * as Redux from "redux";
 import { Automata } from "./Automata";
-import {ACTION_TYPE_PREFIEX, ActionDefinition,  ActionPayload,  AutomataAction,  AutomataState} from "./common";
+import {ACTION_TYPE_PREFIX, ActionDefinition,  ActionPayload,  AutomataAction,  AutomataState} from "./common";
 
 export function automataReducer<TState>(automata: Automata<TState>): Redux.Reducer<AutomataState<TState>> {
 
@@ -23,7 +23,7 @@ export function automataReducer<TState>(automata: Automata<TState>): Redux.Reduc
     return <TPayload extends ActionPayload = undefined>
         (state: AutomataState<TState> = automata.initial, action: AutomataAction<TPayload>) => {
         // skip if not state machine;
-        if (typeof action.type !== "string" || !action.type.startsWith(ACTION_TYPE_PREFIEX))
+        if (typeof action.type !== "string" || !action.type.startsWith(ACTION_TYPE_PREFIX))
             return state;
 
         const node = nodes.find(_ => _.entry.stateName === state.__sm_state);
@@ -34,19 +34,23 @@ export function automataReducer<TState>(automata: Automata<TState>): Redux.Reduc
         if (!stateAction)
             return state;
 
-        const nextNode = nodes.find(_ => _.entry.stateName === stateAction.targetState);
-        if (!nextNode)
-            throw new Error("Can't find state " + stateAction.targetState);
+        let newState = state;
 
-        automata.current = state;
-        const nextState = nextNode.entry(state, action.payload);
-        const canInvoke = <TAction>(actionFunc: ActionDefinition<TAction>) =>
-            nextNode.actions.findIndex(_ => _.actionType === actionFunc.actionType) > -1;
-        const newState: AutomataState<TState> = Object.assign(nextState, {
-            __sm_state: nextNode.entry.stateName,
-            canInvoke
-        });
-        automata.current = newState;
+        if (stateAction.targetState) {
+            const nextNode = nodes.find(_ => _.entry.stateName === stateAction.targetState);
+            if (!nextNode)
+                throw new Error("Can't find state " + stateAction.targetState);
+
+            automata.current = state;
+            const nextState = nextNode.entry(state, action.payload);
+            const canInvoke = <TAction>(actionFunc: ActionDefinition<TAction>) =>
+                nextNode.actions.findIndex(_ => _.actionType === actionFunc.actionType) > -1;
+            newState = Object.assign(nextState, {
+                __sm_state: nextNode.entry.stateName,
+                canInvoke
+            });
+            automata.current = newState;
+        }
 
         stateAction.transitions.forEach(transition =>
             transition(action.dispatch, action.payload));

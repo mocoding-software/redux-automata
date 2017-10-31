@@ -4,11 +4,11 @@ import {
     ActionPayload,
     StateDefinition,
     StateFluentOptions,
-    StateFluetOptionsEx,
+    StateFluentOptionsEx,
     StateMachineOptions
 } from "../common";
 
-export class StateOptionsEx<TState> implements StateFluetOptionsEx<TState> {
+export class StateOptionsEx<TState> implements StateFluentOptionsEx<TState> {
     constructor(
         private options: StateMachineOptions<TState>,
         private stateOptions: StateFluentOptions<TState>) { }

@@ -12,7 +12,7 @@ export interface Node<TState, TPayload extends ActionPayload = undefined> {
  * Edge between nodes in the finite automata graph
  */
 export interface Edge<TPayload extends ActionPayload = undefined> {
-    targetState: string;
+    targetState?: string;
     actionType: string;
     transitions: TransitionMethod<TPayload>[];
 }

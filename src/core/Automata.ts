@@ -1,5 +1,5 @@
 import {
-    ACTION_TYPE_PREFIEX,
+    ACTION_TYPE_PREFIX,
     ActionDefinition,
     ActionPayload,
     AutomataState,
@@ -65,7 +65,7 @@ export class Automata<TState> implements StateMachineOptions<TState> {
     }
 
     public action<TActionPayload extends ActionPayload = undefined>(type: string): ActionDefinition<TActionPayload> {
-        const actionType = ACTION_TYPE_PREFIEX + " " + this.automataName + " / " + type;
+        const actionType = ACTION_TYPE_PREFIX + " " + this.automataName + " / " + type;
 
         const func = (payload: TActionPayload) => {
             const action: PayloadAction<TActionPayload> = {

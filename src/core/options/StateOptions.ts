@@ -24,7 +24,8 @@ export class StateOptions<TState> implements StateFluentOptions<TState> {
         return builder;
     }
 
-    public or<TPayload extends ActionPayload>(state: StateDefinition<TState, TPayload>): StateFluentOptions<TState> {
+    public or<TOtherState, TPayload extends ActionPayload>
+        (state: StateDefinition<TOtherState, TPayload>): StateFluentOptions<TState> {
         this.sourceStates.push(state.stateName);
         return this;
     }
