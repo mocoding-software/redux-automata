@@ -19,6 +19,7 @@ The library was developed to support the following scenarios:
 
 ## Installation
 
+1. Add package
 ```
 npm i redux-automata --save
 ```
@@ -28,12 +29,25 @@ or
 yarn add redux-automata
 ```
 
+2. Add automataMiddleware
+```typescript
+import { automataMiddleware } from "redux-automata";
+
+...
+
+const store = Redux.createStore(rootReducer, 
+    Redux.applyMiddleware(
+        automataMiddleware, // adding automata Middleware
+        ...
+    ));
+
+```
 ## Example 
 
 <img src="https://github.com/mocoding-software/redux-automata/raw/master/examples/res/switch.png" width="50%" />
 
 
-The following example is written on Typescript but you can use Javascript as well:
+The following example is written on Typescript:
 
 ```typescript
 import * as Redux from "redux";
@@ -123,11 +137,13 @@ Every state is a reducer function that will be executed on entry.
 Every action is a function that returns action with ```type``` and ```payload```. 
 
 ### Creating States
-Defining the state is absolutely the same on how reducer is defined. In addition to that you have to specify friendly name for the state (should be unique within automata).
+Defining the state is absolutely the same on how reducer is defined.
 
 ```typescript
-    (state: TState, arg: TAction): TState;
+    (state: TState, arg?: TAction): TState;
 ```
+
+In addition to that you have to specify friendly name for the state. Name should be unique within automata.
 
 #### Examples
 
@@ -170,10 +186,10 @@ Here is a good example of fetching data from server:
 
 ...
 
-const FetchData = (dispatch) =>
+const FetchData = (localStore) =>
     apiClient.MakeRequestToServer()
-        .then(_ => dispatch(RequestSucceeded(_))
-        .catch(_ => dispatch(RequestFailed(_)));
+        .then(_ => localStore.dispatch(RequestSucceeded(_))
+        .catch(_ => localStore.dispatch(RequestFailed(_)));
 
 ...
 
@@ -193,11 +209,24 @@ FetchData function will be executed right after automata switched to Fetching st
 Transitions may be defined using the following signature:
 
 ```typescript
-    (dispatch: Redux.Dispatch<any>, arg: TAction): void
+    (dispatch: LocalStore<TState>, arg: TAction): void
+
 ```
 
-Please note that transitions do not have and should not have access to store, 
-since there is no guarantee that state is not changed during the transition. All parameters should be comming through arguments.
+LocalStore is a dispatch function with two properties: ```dispatch``` and ```getState```:
+```typescript
+/**
+ * Local store with own getState and Dispatch methods.
+ * IMPORTANT: Since version 3.0 `extends Redux.Dispatch<any>` will be removed.
+ */
+export interface LocalStore<TState> extends Redux.Dispatch<any> {
+    dispatch: Redux.Dispatch<any>;
+    getState: () => TState;
+}
+```
+
+```getState``` always returns current automata state. That makes possible to add additional data related conditions for transitions with async operations.
+
 
 ### Check State Transitions
 Sometimes it is useful to know whenever certain actions are "enabled" for specific state. 

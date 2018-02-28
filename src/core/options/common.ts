@@ -5,25 +5,25 @@ import { ActionPayload, StateDefinition, TransitionMethod } from "../common";
  */
 export interface Node<TState, TPayload extends ActionPayload = undefined> {
     entry: StateDefinition<TState, TPayload>;
-    actions: Edge<TPayload>[];
+    actions: Edge<TState, TPayload>[];
 }
 
 /**
  * Edge between nodes in the finite automata graph
  */
-export interface Edge<TPayload extends ActionPayload = undefined> {
+export interface Edge<TState, TPayload extends ActionPayload = undefined> {
     targetState?: string;
     actionType: string;
-    transitions: TransitionMethod<TPayload>[];
+    transitions: TransitionMethod<TState, TPayload>[];
 }
 
 /**
  * Edge between nodes in the finite automata graph
  */
-export interface Arc<TPayload extends ActionPayload = undefined> extends Edge<TPayload> {
+export interface Arc<TState, TPayload extends ActionPayload = undefined> extends Edge<TState, TPayload> {
     sourceState: string;
 }
 
-export interface ArcCreator<TPayload extends ActionPayload = undefined> {
-    createArcs(): Arc<TPayload>[];
+export interface ArcCreator<TState, TPayload extends ActionPayload = undefined> {
+    createArcs(): Arc<TState, TPayload>[];
 }

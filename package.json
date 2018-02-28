@@ -1,6 +1,6 @@
 {
     "name": "redux-automata",
-    "version": "2.1.1",
+    "version": "2.2.0",
     "description": "Finite state automata for Redux.",
     "main": "./dist/redux-automata.min.js",
     "typings": "./dist/typings/index.d.ts",
@@ -39,7 +39,7 @@
         "ts-loader": "3.1.1",
         "tslint": "5.8.0",
         "tslint-loader": "3.5.3",
-        "typescript": "2.5.3",
+        "typescript": "2.7.2",
         "webpack": "3.8.1"
     },
     "dependencies": {

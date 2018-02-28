@@ -10,9 +10,10 @@ import {
 import { Arc, ArcCreator } from "./common";
 import { StateOptionsEx } from "./StateOptionsEx";
 
-export class ActionOptions<TState, TAction> implements ActionFluentOptions<TState, TAction>, ArcCreator<TState> {
+export class ActionOptions<TState, TAction>
+    implements ActionFluentOptions<TState, TAction>, ArcCreator<TState, TAction> {
 
-    private transitions: TransitionMethod<TAction>[] = [];
+    private transitions: TransitionMethod<TState, TAction>[] = [];
     private targetState?: string;
 
     constructor(
@@ -26,7 +27,7 @@ export class ActionOptions<TState, TAction> implements ActionFluentOptions<TStat
         return new StateOptionsEx(this.smOptions, this.stateOptions);
     }
 
-    public execute(transition: TransitionMethod<TAction>): ActionFluentOptions<TState, TAction> {
+    public execute(transition: TransitionMethod<TState, TAction>): ActionFluentOptions<TState, TAction> {
         this.transitions.push(transition);
         return this;
     }
@@ -35,7 +36,7 @@ export class ActionOptions<TState, TAction> implements ActionFluentOptions<TStat
         return new StateOptionsEx(this.smOptions, this.stateOptions);
     }
 
-    public createArcs(): Arc<ActionPayload>[] {
+    public createArcs(): Arc<TState, ActionPayload>[] {
         const {
             sourceStates,
             actionType,

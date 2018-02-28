@@ -19,7 +19,7 @@ describe("Transitions With Promise", () => {
     const EndProcess = automata.action<string>("End");
 
     let promise: Promise<any>;
-    const ProcessData: TransitionMethod = dispatch => {
+    const ProcessData: TransitionMethod<TestState> = dispatch => {
         promise = new Promise<string>((resolve, reject) => setTimeout(() => resolve("Data"), 200))
             .then(data => dispatch(EndProcess(data)));
     };

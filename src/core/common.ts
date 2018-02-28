@@ -19,7 +19,7 @@ export interface CanInvokeCapabilities {
 /**
  * Generic action class that contains type and payload.
  */
-export interface PayloadAction<TPayload extends ActionPayload = undefined> extends Redux.Action {
+export interface PayloadAction<TPayload extends ActionPayload = undefined> extends Redux.AnyAction {
     payload?: TPayload;
 }
 
@@ -36,7 +36,7 @@ export interface AutomataAction<TPayload extends ActionPayload = undefined> exte
  */
 export interface ActionDefinition<TPayload extends ActionPayload = undefined> {
     actionType: string;
-    (arg?: TPayload): PayloadAction<TPayload>;
+    (payload?: TPayload): PayloadAction<TPayload>;
 }
 
 /**
@@ -49,12 +49,29 @@ export type TypedReducer<TState, TPayload extends ActionPayload = undefined> = (
  */
 export interface StateDefinition
     <TState, TPayload extends ActionPayload = undefined> extends TypedReducer<TState, TPayload> {
+    stateName: string;
+}
+
+/**
+ * Local store with own getState and Dispatch methods.
+ * IMPORTANT: Since version 3.0 `extends Redux.Dispatch<any>` will be removed.
+ */
+export interface LocalStore<TState> extends Redux.Dispatch<any> {
+    dispatch: Redux.Dispatch<any>;
+    getState: () => TState;
+}
+
+/**
+ * Typed Reducer method aka extends Redux.Reducer<TState>
+ */
+export interface StateDefinition
+    <TState, TPayload extends ActionPayload = undefined> extends TypedReducer<TState, TPayload> {
 
     stateName: string;
 }
 
-export type TransitionMethod<TPayload extends ActionPayload = undefined>
-    = (dispatch: Redux.Dispatch<any>, arg: TPayload) => void;
+export type TransitionMethod<TState, TPayload extends ActionPayload = undefined>
+    = (localStore: LocalStore<TState>, arg: TPayload) => void;
 
 export interface StateMachineOptions<TState> {
     in<TPayload extends ActionPayload>(state: StateDefinition<TState, TPayload>): StateFluentOptions<TState>;
@@ -66,9 +83,9 @@ export interface StateFluentOptions<TState> {
     or<TPayload extends ActionPayload>(state: StateDefinition<TState, TPayload>): StateFluentOptions<TState>;
 }
 
-export interface ActionFluentOptions<TState, TPayload extends ActionPayload> {
+export interface ActionFluentOptions<TState, TPayload extends ActionPayload = undefined> {
     goTo(state: StateDefinition<TState, TPayload>): StateFluentOptionsEx<TState>;
-    execute(transition: TransitionMethod<TPayload>): ActionFluentOptions<TState, TPayload>;
+    execute(transition: TransitionMethod<TState, TPayload>): ActionFluentOptions<TState, TPayload>;
     noop(): StateFluentOptionsEx<TState>;
 }
 

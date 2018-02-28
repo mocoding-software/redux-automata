@@ -6,6 +6,7 @@
         "trailing-comma": false,
         "interface-name": [true, "never-prefix"],
         "arrow-parens": [true, "ban-single-arg-parens"],
-        "array-type": [true, "array"]        
+        "array-type": [true, "array"],
+        "max-line-length": [true, 120]
     }
 }

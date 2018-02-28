@@ -22,6 +22,8 @@ export class Automata<TState> implements StateMachineOptions<TState> {
      *
      */
     constructor(protected automataName: string) {
+        this.initial = Object.assign({});
+        this.current = this.initial;
     }
 
     public in(state: StateDefinition<TState, ActionPayload>): StateFluentOptions<TState> {
@@ -40,7 +42,7 @@ export class Automata<TState> implements StateMachineOptions<TState> {
         return option;
     }
 
-    public beginWith(state: StateDefinition<TState>) {
+    public beginWith(state: StateDefinition<TState, any | undefined>) {
         const existingState = this.states.find(_ => _.stateName === state.stateName);
         if (!existingState)
             throw new Error("State should be previously defined using this.state(...) method.");
@@ -64,10 +66,10 @@ export class Automata<TState> implements StateMachineOptions<TState> {
         return newState;
     }
 
-    public action<TActionPayload extends ActionPayload = undefined>(type: string): ActionDefinition<TActionPayload> {
+    public action<TActionPayload extends ActionPayload>(type: string): ActionDefinition<TActionPayload> {
         const actionType = ACTION_TYPE_PREFIX + " " + this.automataName + " / " + type;
 
-        const func = (payload: TActionPayload) => {
+        const func = (payload?: TActionPayload) => {
             const action: PayloadAction<TActionPayload> = {
                 payload,
                 type: actionType
@@ -79,12 +81,12 @@ export class Automata<TState> implements StateMachineOptions<TState> {
     }
 
     public getGraph(): Node<TState, ActionPayload>[] {
-        const arcs = this.options.reduce((a, b) => a.concat(b.getArcs()), new Array<Arc<TState>>());
+        const arcs = this.options.reduce((a, b) => a.concat(b.getArcs()), new Array<Arc<TState, ActionPayload>>());
 
         return this.states.map<Node<TState, ActionPayload>>(entry => {
             let actions = arcs
                 .filter(_ => _.sourceState === entry.stateName)
-                .map<Edge<TState>>(_ => ({
+                .map<Edge<TState, ActionPayload>>(_ => ({
                     actionType: _.actionType,
                     targetState: _.targetState,
                     transitions: _.transitions,

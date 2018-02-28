@@ -22,7 +22,7 @@ export class TaskAutomata<
     public Fail: ActionDefinition<TError>;
 
         // transitions
-    public BeginProcessing: TransitionMethod<TInput>;
+    public BeginProcessing: TransitionMethod<TState, TInput>;
 
     /**
      *

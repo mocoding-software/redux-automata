@@ -42,9 +42,10 @@ const FetchData = (dispatch: Redux.Dispatch<any>) =>
                     // dispatch(RequestSucceeded(data));
                     // small delay to see a loader
                     setTimeout(() => dispatch(RequestSucceeded(data)), 1000);
-                }
-                else
-                    dispatch(RequestFailed("Failed to get data from GitHub. Status Code: " + response.status + ". Message: " + data.message));
+                } else
+                    dispatch(RequestFailed(
+                        "Failed to get data from GitHub. Status Code: "
+                        + response.status + ". Message: " + data.message));
             });
         })
         .catch(_ => dispatch(RequestFailed(JSON.stringify(_))));
