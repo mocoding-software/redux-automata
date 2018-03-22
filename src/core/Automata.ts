@@ -66,7 +66,7 @@ export class Automata<TState> implements StateMachineOptions<TState> {
         return newState;
     }
 
-    public action<TActionPayload extends ActionPayload>(type: string): ActionDefinition<TActionPayload> {
+    public action<TActionPayload extends ActionPayload = undefined>(type: string): ActionDefinition<TActionPayload> {
         const actionType = ACTION_TYPE_PREFIX + " " + this.automataName + " / " + type;
 
         const func = (payload?: TActionPayload) => {

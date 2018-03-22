@@ -1,12 +1,12 @@
 {
     "name": "redux-automata",
-    "version": "2.2.0",
+    "version": "2.2.1",
     "description": "Finite state automata for Redux.",
-    "main": "./dist/redux-automata.min.js",
+    "main": "dist/redux-automata.min.js",    
     "typings": "./dist/typings/index.d.ts",
     "scripts": {
         "build": "webpack --config webpack.config.js --progress --color || echo not ok",
-        "prerelease": "yarn build",
+        "prerelease": "yarn build",        
         "test": "jest --verbose"
     },
     "repository": {
@@ -29,18 +29,22 @@
     "bugs": {
         "url": "https://github.com/mocoding-software/redux-automata/issues"
     },
+    "files": [
+        "dist"
+    ],
     "homepage": "https://github.com/mocoding-software/redux-automata#readme",
     "devDependencies": {
-        "@types/jest": "21.1.5",
-        "@types/node": "8.0.47",
-        "clean-webpack-plugin": "0.1.17",
-        "jest": "21.2.1",
-        "ts-jest": "21.1.4",
-        "ts-loader": "3.1.1",
+        "@types/jest": "22.2.1",
+        "@types/node": "8.10.0",
+        "clean-webpack-plugin": "0.1.19",
+        "jest": "22.4.3",
+        "ts-jest": "22.4.2",
+        "ts-loader": "4.1.0",
         "tslint": "5.8.0",
-        "tslint-loader": "3.5.3",
+        "tslint-loader": "3.6.0",
         "typescript": "2.7.2",
-        "webpack": "3.8.1"
+        "webpack": "4.2.0",
+        "webpack-cli": "2.0.13"            
     },
     "dependencies": {
         "redux": "3.7.2"

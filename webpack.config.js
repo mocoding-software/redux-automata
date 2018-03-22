@@ -18,7 +18,7 @@ module.exports = {
   },
 
   module: {
-    loaders: [{
+    rules: [{
       test: /\.(ts|tsx)?$/,
       use: "ts-loader",
       exclude: [/node_modules/]
@@ -30,9 +30,7 @@ module.exports = {
         NODE_ENV: JSON.stringify('production')
       }
     }),
-    new CleanWebpackPlugin([distPath]),
-    new webpack.optimize.DedupePlugin(),
-    new webpack.optimize.UglifyJsPlugin(),
+    new CleanWebpackPlugin([distPath]),        
     new webpack.optimize.OccurrenceOrderPlugin()
   ]
 };

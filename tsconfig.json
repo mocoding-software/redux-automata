@@ -8,9 +8,9 @@
 		"emitDecoratorMetadata": true,
 		"sourceMap": true,
 		"declaration": true,
-		"outDir": "typings",
+		"outDir": "typings",		
+		"removeComments": true,
 		"baseUrl": "./src",
-        "removeComments": true,
         "strict": true,
         "lib": [
             "es6"            
