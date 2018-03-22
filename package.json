@@ -1,12 +1,11 @@
 {
     "name": "redux-automata",
-    "version": "2.2.1",
+    "version": "2.3.0",
     "description": "Finite state automata for Redux.",
     "main": "dist/redux-automata.min.js",    
     "typings": "./dist/typings/index.d.ts",
     "scripts": {
-        "build": "webpack --config webpack.config.js --progress --color || echo not ok",
-        "prerelease": "yarn build",        
+        "build": "webpack --config webpack.config.js --progress --color -p || echo not ok",        
         "test": "jest --verbose"
     },
     "repository": {

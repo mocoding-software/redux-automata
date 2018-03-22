@@ -11,7 +11,8 @@ module.exports = {
     path: distPath,
     filename: "[name].min.js",
     library: "[name]",
-    libraryTarget: "umd"
+    libraryTarget: "umd",
+    globalObject: "this"
   },
   resolve: {
     extensions: [".ts", ".js"]
