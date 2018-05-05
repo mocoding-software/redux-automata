@@ -62,7 +62,7 @@ describe("Conditional Transitions", () => {
     automata.beginWith(Idle);
 
     const reducer = automataReducer(automata);
-    const store = Redux.createStore<RootState>(
+    const store = Redux.createStore(
         Redux.combineReducers<RootState>({ process: reducer }), Redux.applyMiddleware(automataMiddleware));
 
     test("Invoke Test", () => {

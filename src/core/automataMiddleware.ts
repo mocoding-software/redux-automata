@@ -1,8 +1,9 @@
 import * as Redux from "redux";
 import { ACTION_TYPE_PREFIX, ActionPayload, AutomataAction, AutomataState, PayloadAction } from "./common";
 
-export function automataMiddleware<S>(api: Redux.MiddlewareAPI<S>): (next: Redux.Dispatch<S>) => Redux.Dispatch<S> {
-    return (next: Redux.Dispatch<S>) =>
+export function automataMiddleware<D extends Redux.Dispatch, S>(api: Redux.MiddlewareAPI<D, S>):
+    (next: Redux.Dispatch) => Redux.Dispatch {
+    return (next: Redux.Dispatch) =>
         <A extends PayloadAction<ActionPayload>>(action: A) => {
             if (!action.type.startsWith(ACTION_TYPE_PREFIX))
                 return next(action);

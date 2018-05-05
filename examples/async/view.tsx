@@ -65,8 +65,8 @@ class View extends React.Component<ViewProps, {}> {
         )
     }
 
-    onRenderError(): JSX.Element {
-        let { error } = this.props.response;
+    public onRenderError(): JSX.Element {
+        const { error } = this.props.response;
         return (
             <Alert bsStyle="danger">
                 <h4>Request failed!</h4>
@@ -77,7 +77,7 @@ class View extends React.Component<ViewProps, {}> {
     }
 
     public onRenderLoading(): JSX.Element {
-        return <ProgressBar active now={100} />
+        return <ProgressBar active now={100} />;
     }
 
     public onRenderData(): JSX.Element {
@@ -94,7 +94,7 @@ class View extends React.Component<ViewProps, {}> {
                 </Col>
             </Row>
             <br />
-            <Row style={{ "text-align": "center" }}>
+            <Row style={{ textAlign: "center" }}>
                 <Col xs={4}>
                     <Glyphicon glyph="eye-open" /> Watchers <Badge>{data.watchers_count}</Badge>
                 </Col>

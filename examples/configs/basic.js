@@ -6,9 +6,7 @@ const path = require("path");
 console.log(__dirname);
 
 module.exports = {
-    entry: [
-        "react-hot-loader/patch",
-        "webpack-dev-server/client?http://localhost:3000",
+    entry: [              
         "./basic/index.tsx",
     ],
     output: {
@@ -28,14 +26,11 @@ module.exports = {
     },
 
     module: {
-        loaders: [
+        rules: [
             // All files with a ".ts" or ".tsx" extension will be handled by "ts-loader".
             {
                 test: /\.tsx?$/,
-                loaders: [
-                    "react-hot-loader/webpack",
-                    "ts-loader"
-                ],
+                loaders: "ts-loader",
                 exclude: [/node_modules/]
             }
         ]

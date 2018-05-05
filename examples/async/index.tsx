@@ -15,7 +15,7 @@ const pipeline = Redux.applyMiddleware(
     createLogger()
 );
 const reducer = automataReducer(fetchAutomata);
-const store = Redux.createStore<ResponseState>(reducer, Redux.compose(pipeline));
+const store = Redux.createStore(reducer, Redux.compose(pipeline));
 
 //run application
 const mount = document.getElementById("app");

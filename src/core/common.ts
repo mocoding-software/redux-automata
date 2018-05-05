@@ -27,7 +27,7 @@ export interface PayloadAction<TPayload extends ActionPayload = undefined> exten
  * Action with dispatch to be processed by automata reducer.
  */
 export interface AutomataAction<TPayload extends ActionPayload = undefined> extends PayloadAction<TPayload> {
-    dispatch: Redux.Dispatch<any>;
+    dispatch: Redux.Dispatch;
 }
 
 /**

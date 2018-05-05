@@ -14,7 +14,7 @@ const pipeline = Redux.applyMiddleware(
     automataMiddleware, // adding automata Middleware
     createLogger()
 );
-const store = Redux.createStore<State>(reducer, Redux.compose(pipeline));
+const store = Redux.createStore(reducer, Redux.compose(pipeline));
 
 // run application
 const mount = document.getElementById("app");
@@ -28,7 +28,7 @@ declare var module: any;
 if (module.hot) {
     module.hot.accept("./app", () => {
         require("./app");
-        //re-run client        
+        // re-run client
         RunApplication();
     });
 }
