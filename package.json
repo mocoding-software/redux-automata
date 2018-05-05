@@ -1,6 +1,6 @@
 {
     "name": "redux-automata",
-    "version": "2.4.0",
+    "version": "2.4.1",
     "description": "Finite state automata for Redux.",
     "main": "dist/redux-automata.min.js",    
     "typings": "./dist/typings/index.d.ts",

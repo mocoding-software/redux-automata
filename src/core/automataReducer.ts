@@ -1,8 +1,15 @@
 import * as Redux from "redux";
 import { Automata } from "./Automata";
-import { ACTION_TYPE_PREFIX, ActionDefinition, ActionPayload, AutomataAction, AutomataState, LocalStore } from "./common";
+import {
+    ACTION_TYPE_PREFIX,
+    ActionDefinition,
+    ActionPayload,
+    AutomataAction,
+    AutomataState,
+    LocalStore
+} from "./common";
 
-export function automataReducer<TState>(automata: Automata<TState>): Redux.Reducer<AutomataState<TState>> {
+export function automataReducer<TState>(automata: Automata<TState>): Redux.Reducer<TState> {
 
     if (automata.initial === undefined)
         throw new Error("No initial state specified. Use BeginWith() method to specify initial state.");

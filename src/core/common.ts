@@ -1,6 +1,6 @@
 import * as Redux from "redux";
 
-export type AutomataState<TState> = TState & { __sm_state: string | undefined } & CanInvokeCapabilities;
+export type AutomataState<TState> = TState & { __sm_state?: string } & CanInvokeCapabilities;
 
 export const ACTION_TYPE_PREFIX = "@@AUTOMATA";
 

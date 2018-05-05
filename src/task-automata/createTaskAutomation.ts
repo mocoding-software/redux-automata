@@ -8,7 +8,7 @@ export interface TaskAutomation
     TInput = undefined,
     TError extends Error = Error,
     TState extends TaskState<TResult, TError> = TaskState<TResult, TError>> {
-        reducer: Redux.Reducer<AutomataState<TState>>;
+        reducer: Redux.Reducer<TState>;
         start: ActionDefinition<TInput>;
         restart: ActionDefinition<TInput>;
         cancel: ActionDefinition;
