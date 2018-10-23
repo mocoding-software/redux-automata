@@ -1,9 +1,9 @@
 {
     "name": "redux-automata",
-    "version": "2.4.2",
+    "version": "2.4.4",
     "description": "Finite state automata for Redux.",
     "main": "dist/redux-automata.min.js",    
-    "typings": "./dist/typings/index.d.ts",
+    "typings": "dist/typings/index.d.ts",
     "scripts": {
         "build": "webpack --config webpack.config.js --progress --color -p || echo not ok",        
         "test": "jest --verbose"
@@ -29,7 +29,8 @@
         "url": "https://github.com/mocoding-software/redux-automata/issues"
     },
     "files": [
-        "dist"
+        "dist",
+        "typings"
     ],
     "homepage": "https://github.com/mocoding-software/redux-automata#readme",
     "devDependencies": {
