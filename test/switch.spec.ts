@@ -1,8 +1,8 @@
 import * as Redux from "redux";
-import { Automata, automataMiddleware, automataReducer } from "../src";
+import { Automata, automataMiddleware, automataReducer, AutomataState } from "../src";
 
 interface TestState {
-    value: string;
+    value?: string;
 }
 
 describe("Switch Transitions", () => {
@@ -32,13 +32,13 @@ describe("Switch Transitions", () => {
     test("Toggle On/Off Test", () => {
         store.dispatch(Toggle());
 
-        let currentState = store.getState();
+        let currentState = store.getState() as AutomataState<TestState>;
         expect(currentState.__sm_state).toBe(On.stateName);
         expect(currentState.value).toBe("Switched On");
- 
+
         store.dispatch(Toggle());
 
-        currentState = store.getState();
+        currentState = store.getState() as AutomataState<TestState>;
         expect(currentState.__sm_state).toBe(Off.stateName);
         expect(currentState.value).toBe("Switched Off");
     });

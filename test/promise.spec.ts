@@ -1,5 +1,5 @@
 import * as Redux from "redux";
-import { Automata, automataMiddleware, automataReducer, TransitionMethod } from "../src";
+import { Automata, automataMiddleware, automataReducer, AutomataState, TransitionMethod } from "../src";
 
 interface TestState {
     processing: boolean;
@@ -41,7 +41,7 @@ describe("Transitions With Promise", () => {
     test("Invoke Test", () => {
         store.dispatch(StartProcess());
 
-        const currentState = store.getState();
+        const currentState = store.getState() as AutomataState<TestState>;
         expect(currentState.__sm_state).toBe(Processing.stateName);
         expect(currentState.processing).toBeTruthy();
     });
@@ -49,14 +49,14 @@ describe("Transitions With Promise", () => {
     test("Second Invoke Test", () => {
         store.dispatch(StartProcess());
 
-        const currentState = store.getState();
+        const currentState = store.getState() as AutomataState<TestState>;
         expect(currentState.__sm_state).toBe(Processing.stateName);
         expect(currentState.processing).toBeTruthy();
     });
 
     test("On Promise Completed", () => {
         return promise.then(() => {
-            const currentState = store.getState();
+            const currentState = store.getState() as AutomataState<TestState>;
             expect(currentState.__sm_state).toBe(Completed.stateName);
             expect(currentState.value).toBe("Data"); // this should remaing the same.
         });

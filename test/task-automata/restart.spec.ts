@@ -1,5 +1,5 @@
 import * as Redux from "redux";
-import { Automata, automataMiddleware, automataReducer, TaskAutomata } from "../../src";
+import { Automata, automataMiddleware, automataReducer, AutomataState, TaskAutomata, TaskState } from "../../src";
 
 interface Data {
     message: string;
@@ -10,7 +10,7 @@ describe("Restart Task Automata", () => {
     const task = (message: string) => {
         promise = new Promise<Data>((ok, cancel) => setTimeout(() => ok({ message }), 200));
         return promise;
-    }
+    };
     const automata = new TaskAutomata<Data, string>("Message", task);
     automata.setupProcessIn(automata.Idle);
     automata.beginWith(automata.Idle);
@@ -21,28 +21,28 @@ describe("Restart Task Automata", () => {
     test("Start Process", () => {
         store.dispatch(automata.Start("Expected Message"));
 
-        const currentState = store.getState();
+        const currentState = store.getState() as AutomataState<TaskState<Data, Error>>;
         expect(currentState.__sm_state).toBe(automata.Processing.stateName);
         expect(currentState.isProcessing).toBeTruthy();
     });
 
     test("Restart", () => {
         return promise.then(() => {
-            let currentState = store.getState();
+            let currentState = store.getState() as AutomataState<TaskState<Data, Error>>;
             expect(currentState.__sm_state).toBe(automata.Completed.stateName);
-            expect(currentState.result.message).toBe("Expected Message");
+            expect(currentState.result!.message).toBe("Expected Message");
 
             store.dispatch(automata.Restart("Expected Message2"));
 
-            currentState = store.getState();
+            currentState = store.getState() as AutomataState<TaskState<Data, Error>>;
             expect(currentState.__sm_state).toBe(automata.Processing.stateName);
             expect(currentState.isProcessing).toBeTruthy();
-            expect(currentState.result.message).toBe("Expected Message"); // this should remain the same.
+            expect(currentState.result!.message).toBe("Expected Message"); // this should remain the same.
 
             return promise.then(() => {
-                currentState = store.getState();
+                currentState = store.getState() as AutomataState<TaskState<Data, Error>>;
                 expect(currentState.__sm_state).toBe(automata.Completed.stateName);
-                expect(currentState.result.message).toBe("Expected Message2"); // this should remain the same.
+                expect(currentState.result!.message).toBe("Expected Message2"); // this should remain the same.
             });
         });
     });

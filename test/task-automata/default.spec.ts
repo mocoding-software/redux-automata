@@ -1,14 +1,5 @@
-
-// interface Data {
-//     message: string;
-// }
-
-// const promise = new Promise<Data>((ok, cancel) => setTimeout(() => ok({ message: "data" })));
-
-// const automation = promiseAutomata("Some", promise, dispatch => dispatch(push("/debug")));import * as Redux from "redux";
-
 import * as Redux from "redux";
-import { Automata, automataMiddleware, automataReducer, TaskAutomata } from "../../src";
+import { Automata, automataMiddleware, automataReducer, AutomataState, TaskAutomata, TaskState } from "../../src";
 
 interface Data {
     message: string;
@@ -27,7 +18,7 @@ describe("Task Automata", () => {
     test("Start Process", () => {
         store.dispatch(automata.Start());
 
-        const currentState = store.getState();
+        const currentState = store.getState() as AutomataState<TaskState<Data, Error>>;
         expect(currentState.__sm_state).toBe(automata.Processing.stateName);
         expect(currentState.isProcessing).toBeTruthy();
     });
@@ -35,16 +26,16 @@ describe("Task Automata", () => {
     test("Second Start Process Test", () => {
         store.dispatch(automata.Start());
 
-        const currentState = store.getState();
+        const currentState = store.getState() as AutomataState<TaskState<Data, Error>>;
         expect(currentState.__sm_state).toBe(automata.Processing.stateName);
         expect(currentState.isProcessing).toBeTruthy();
     });
 
     test("On Process Completed", () => {
         return promise.then(() => {
-            const currentState = store.getState();
+            const currentState = store.getState() as AutomataState<TaskState<Data, Error>>;
             expect(currentState.__sm_state).toBe(automata.Completed.stateName);
-            expect(currentState.result.message).toBe("data"); // this should remaing the same.
+            expect(currentState.result!.message).toBe("data"); // this should remaing the same.
         });
     });
 });

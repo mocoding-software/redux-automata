@@ -12,7 +12,7 @@ interface TestState {
 }
 
 describe("Conditional Transitions", () => {
-    const automata = new Automata<TestState>("Default State");
+    const automata = new Automata<AutomataState<TestState>>("Default State");
 
     // states
     const Idle = automata.state("Idle", () => ({ processing: false }));

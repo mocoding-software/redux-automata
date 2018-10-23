@@ -1,14 +1,14 @@
 import * as Redux from "redux";
-import { Automata, automataMiddleware, automataReducer } from "../src";
+import { Automata, automataMiddleware, automataReducer, AutomataState } from "../src";
 
 interface TestState {
-    value: string;
+    value?: string;
 }
 
 describe("Absolute Transitions", () => {
     const automata = new Automata<TestState>("Default State");
 
-    const Idle = automata.state("Idle", () => ({ value: null }));
+    const Idle = automata.state("Idle", () => ({ value: undefined }));
     const Active = automata.state<string>("Active", (state, value) => ({ value }));
     const Other = automata.state<number>("Other", (state, value) => ({ value: value.toString() }));
 
@@ -33,7 +33,7 @@ describe("Absolute Transitions", () => {
     test("On Action Test", () => {
         store.dispatch(SetMessage("Test"));
 
-        const currentState = store.getState();
+        const currentState = store.getState() as AutomataState<TestState>;
         expect(currentState.__sm_state).toBe(Active.stateName);
         expect(currentState.value).toBe("Test");
     });
@@ -41,7 +41,7 @@ describe("Absolute Transitions", () => {
     test("On Action 2 Test", () => {
         store.dispatch(SetMessage("Test 2"));
 
-        const currentState = store.getState();
+        const currentState = store.getState() as AutomataState<TestState>;
         expect(currentState.__sm_state).toBe(Active.stateName);
         expect(currentState.value).toBe("Test 2"); // this should be updated
     });
@@ -49,8 +49,8 @@ describe("Absolute Transitions", () => {
     test("On Cancel Test", () => {
         store.dispatch(Cancel());
 
-        const currentState = store.getState();
+        const currentState = store.getState() as AutomataState<TestState>;
         expect(currentState.__sm_state).toBe(Idle.stateName);
-        expect(currentState.value).toBeNull(); // this should be updated
+        expect(currentState.value).toBeUndefined(); // this should be updated
     });
 });
