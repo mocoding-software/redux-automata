@@ -9,7 +9,7 @@ module.exports = {
   },
   output: {
     path: distPath,
-    filename: "[name].min.js",
+    filename: "index.js",
     library: "[name]",
     libraryTarget: "umd",
     globalObject: "this"

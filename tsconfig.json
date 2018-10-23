@@ -8,7 +8,7 @@
 		"emitDecoratorMetadata": true,
 		"sourceMap": true,
 		"declaration": true,
-		"outDir": "typings",		
+		"outDir": "dist",		
 		"removeComments": true,
 		"baseUrl": "./src",
         "strict": true,
