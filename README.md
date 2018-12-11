@@ -317,13 +317,13 @@ All examples code are located in ```examples``` folder
 
 Run Basic example:
 ```bash
-npm i
-npm run basic
+yarn
+yarn run basic
 ```
 Run Async example:
 ```bash
-npm i
-npm run async
+yarn
+yarn run async
 ```
 
 Every example static content is served from http://localhost:3000 with hot reload.
@@ -332,6 +332,16 @@ Every example static content is served from http://localhost:3000 with hot reloa
 
 All source code is located in ```src``` folder.
 All tests are located in ```test``` folder.
+
+Run build
+```bash
+yarn build
+```
+
+Run tests
+```bash
+yarn test
+```
 
 ## Credits
 
@@ -354,4 +364,4 @@ License
 
 [The MIT License](https://raw.githubusercontent.com/mocoding-software/redux-automata/master/LICENSE)
 
-COPYRIGHT (C) 2017 MOCODING, LLC
+COPYRIGHT (C) 2018 MOCODING, LLC

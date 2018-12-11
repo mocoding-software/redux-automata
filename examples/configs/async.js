@@ -17,6 +17,7 @@ module.exports = {
 
     // Enable sourcemaps for debugging webpack's output.
     devtool: "eval",
+    mode: "development",
 
     resolve: {
         alias: {
