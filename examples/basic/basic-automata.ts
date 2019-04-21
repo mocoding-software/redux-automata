@@ -1,11 +1,11 @@
 import * as Redux from "redux";
 import { Automata, automataReducer } from "redux-automata";
 
-export interface State{
+export interface State {
     message: string;
 }
 
-const automata = new Automata<State>("Counter");
+const automata = new Automata<State>("Switcher");
 // states
 const Off = automata.state("Off", () => ({ message: "Switched Off" }));
 const On = automata.state("On", () => ({ message: "Switched On" }));
@@ -27,4 +27,4 @@ export {
     automata as basicAutomata,
     reducer,
     Toggle
-}
+};

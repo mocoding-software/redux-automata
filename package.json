@@ -1,6 +1,6 @@
 {
     "name": "redux-automata",
-    "version": "2.5.1",
+    "version": "2.5.2",
     "description": "Finite state automata for Redux.",
     "main": "dist/index",
     "scripts": {
@@ -32,20 +32,20 @@
     ],
     "homepage": "https://github.com/mocoding-software/redux-automata#readme",
     "devDependencies": {
-        "@types/jest": "23.3.10",
-        "@types/node": "10.12.12",
-        "clean-webpack-plugin": "1.0.0",
-        "jest": "23.6.0",
-        "ts-jest": "23.10.5",
-        "ts-loader": "5.3.1",
-        "tslint": "5.11.0",
-        "tslint-loader": "3.5.4",
-        "typescript": "^3.1.6",
-        "webpack": "4.27.1",
-        "webpack-cli": "3.1.2"
+        "@types/jest": "^24.0.11",
+        "@types/node": "^11.13.6",
+        "clean-webpack-plugin": "^2.0.1",
+        "jest": "^24.7.1",
+        "ts-jest": "^24.0.2",
+        "ts-loader": "^5.3.3",
+        "tslint": "^5.16.0",
+        "tslint-loader": "^3.5.4",
+        "typescript": "^3.4.4",
+        "webpack": "^4.30.0",
+        "webpack-cli": "^3.3.0"
     },
     "dependencies": {
-        "redux": "4.0.1"
+        "redux": "^4.0.1"
     },
     "jest": {
         "moduleFileExtensions": [
@@ -53,7 +53,7 @@
             "js"
         ],
         "transform": {
-            "\\.(ts)$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+            "\\.(ts)$": "ts-jest"
         },
         "testRegex": "/test/.*\\.(ts|js)$",
         "collectCoverageFrom": [

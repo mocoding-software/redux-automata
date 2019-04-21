@@ -31,7 +31,7 @@ module.exports = {
         NODE_ENV: JSON.stringify('production')
       }
     }),
-    new CleanWebpackPlugin([distPath]),        
+    new CleanWebpackPlugin(),
     new webpack.optimize.OccurrenceOrderPlugin()
   ]
 };
