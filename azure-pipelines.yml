@@ -1,0 +1,19 @@
+
+# name: $(majorVersion).$(minorVersion).$(patchVersion)$(channelVersion)$(buildVersion)$(Rev:.r)
+
+trigger:
+  branches:
+    include:
+      - master
+  tags:
+    include:
+      - v*
+
+pool:
+  vmImage: "ubuntu-18.04"
+
+steps:
+  - task: geeklearningio.gl-vsts-tasks-yarn.yarn-task.Yarn@2
+    displayName: "Yarn"
+    inputs:
+      ProjectDirectory: "."
