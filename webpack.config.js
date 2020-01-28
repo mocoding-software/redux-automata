@@ -1,15 +1,15 @@
 var webpack = require("webpack");
-var CleanWebpackPlugin = require('clean-webpack-plugin');
+var { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const path = require("path");
 var distPath = path.join(__dirname, "dist");
 
-module.exports = {
+const config = {
   entry: {
     "redux-automata": ["./src/index.ts"]
   },
   output: {
     path: distPath,
-    filename: "index.js",
+    filename: "redux-automata.js",
     library: "[name]",
     libraryTarget: "umd",
     globalObject: "this"
@@ -21,8 +21,12 @@ module.exports = {
   module: {
     rules: [{
       test: /\.(ts|tsx)?$/,
-      use: "ts-loader",
+      loader: "ts-loader",
+      options: {
+        configFile: "tsconfig.json"
+      },
       exclude: [/node_modules/]
+      
     }]
   },
   plugins: [
@@ -35,3 +39,18 @@ module.exports = {
     new webpack.optimize.OccurrenceOrderPlugin()
   ]
 };
+
+module.exports = [ config,
+{
+  ...config,   
+  module: {
+    rules: [{
+      test: /\.(ts|tsx)?$/,
+      loader: "ts-loader",
+      options: {
+        configFile: "tsconfig.module.json"
+      },
+      exclude: [/node_modules/]
+    }]
+  }, 
+}]

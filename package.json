@@ -1,63 +1,86 @@
 {
-    "name": "redux-automata",
-    "version": "2.5.3",
-    "description": "Finite state automata for Redux.",
-    "main": "dist/index",
-    "scripts": {
-        "build": "webpack --config webpack.config.js --progress --color -p || echo not ok",
-        "test": "jest --verbose"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/mocoding-software/redux-automata.git"
-    },
-    "keywords": [
-        "redux",
-        "automata",
-        "state machine",
-        "state",
-        "redux actions",
-        "predictable state",
-        "state chart",
-        "finite state machine",
-        "fsm"
+  "name": "redux-automata",
+  "version": "0.0.0",
+  "description": "Finite state automata for Redux.",
+  "main": "lib/redux-automata.js",
+  "unpkg": "dist/redux-automata.js",
+  "module": "es/redux-automata.js",
+  "scripts": {
+    "clean": "rimraf lib dist es coverage types",
+    "build": "rollup -c",
+    "test": "jest --verbose"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mocoding-software/redux-automata.git"
+  },
+  "keywords": [
+    "redux",
+    "automata",
+    "state machine",
+    "state",
+    "redux actions",
+    "predictable state",
+    "state chart",
+    "finite state machine",
+    "fsm"
+  ],
+  "authors": [
+    "MOCODING LLC",
+    "Dennis Miasoutov <me@offbeatful.com> (https://github.com/offbeatful)"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mocoding-software/redux-automata/issues"
+  },
+  "files": [
+    "dist",
+    "lib",
+    "es",
+    "src",
+    "types"
+  ],
+  "homepage": "https://github.com/mocoding-software/redux-automata#readme",
+  "devDependencies": {
+    "@babel/core": "^7.8.3",
+    "@babel/plugin-transform-runtime": "^7.8.3",
+    "@babel/plugin-proposal-object-rest-spread": "^7.8.3",
+    "@babel/preset-env": "^7.8.3",    
+    "@babel/preset-typescript": "^7.8.3",
+    "@types/jest": "^25.1.0",
+    "@types/node": "^12.12.14",
+    "jest": "^25.1.0",
+    "prettier": "^1.19.1",
+    "rimraf": "^3.0.0",
+    "rollup-plugin-babel": "^4.3.3",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-terser": "^5.2.0",
+    "rollup-plugin-typescript2": "^0.25.3",
+    "rollup-plugin-replace": "^2.2.0",
+    "rollup": "^1.30.1",
+    "ts-jest": "^25.0.0",
+    "ts-loader": "^6.2.1",
+    "tslint-config-prettier": "^1.18.0",
+    "tslint-loader": "^3.5.4",
+    "tslint-plugin-prettier": "^2.0.1",
+    "tslint": "^5.20.1",
+    "typescript": "^3.7.5"
+  },
+  "dependencies": {
+    "redux": "^4.0.1",
+    "@babel/runtime": "^7.8.3"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "ts",
+      "js"
     ],
-    "author": "MOCODING, LLC",
-    "license": "MIT",
-    "bugs": {
-        "url": "https://github.com/mocoding-software/redux-automata/issues"
+    "transform": {
+      "\\.(ts)$": "ts-jest"
     },
-    "files": [
-        "dist"
-    ],
-    "homepage": "https://github.com/mocoding-software/redux-automata#readme",
-    "devDependencies": {
-        "@types/jest": "^24.0.23",
-        "@types/node": "^12.12.14",
-        "clean-webpack-plugin": "^2.0.1",
-        "jest": "^24.9.0",
-        "ts-jest": "^24.2.0",
-        "ts-loader": "^6.2.1",
-        "tslint": "^5.20.1",
-        "tslint-loader": "^3.5.4",
-        "typescript": "^3.7.2",
-        "webpack": "^4.41.2",
-        "webpack-cli": "^3.3.10"
-    },
-    "dependencies": {
-        "redux": "^4.0.1"
-    },
-    "jest": {
-        "moduleFileExtensions": [
-            "ts",
-            "js"
-        ],
-        "transform": {
-            "\\.(ts)$": "ts-jest"
-        },
-        "testRegex": "/test/.*\\.(ts|js)$",
-        "collectCoverageFrom": [
-            "src/**"
-        ]
-    }
+    "testRegex": "/test/.*\\.(ts|js)$",
+    "collectCoverageFrom": [
+      "src/**"
+    ]
+  }
 }
