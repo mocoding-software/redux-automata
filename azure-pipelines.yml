@@ -30,14 +30,7 @@ stages:
             displayName: "Update version"
             inputs:
               arguments: "--new-version $(Build.BuildNumber)"
-              ProjectDirectory: $(Build.SourcesDirectory)
-          - task: SonarCloudPrepare@1
-            displayName: "Sonarcloud - Prepare"
-            inputs:
-              SonarCloud: 'sonarcloud'
-              organization: 'mocoding'              
-              projectKey: 'mocoding-software_redux-automata'
-              extraProperties: 'sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)/.coverage/cobertura-coverage.xml'          
+              ProjectDirectory: $(Build.SourcesDirectory)        
           - task: Yarn@3
             displayName: "Pack"
             condition:
@@ -49,12 +42,6 @@ stages:
             inputs:
               PathtoPublish: "$(Build.StagingDirectory)/redux-automata-$(Build.BuildNumber).tgz"
               ArtifactName: npm
-          - task: SonarCloudAnalyze@1
-            displayName: "Sonarcloud Analyze"
-          - task: SonarCloudPublish@1
-            displayName: "Sonarcloud Publish"
-            inputs:
-              pollingTimeoutSec: '300'
           - task: PublishCodeCoverageResults@1
             displayName: "Publich Code Coverage"
             inputs:
