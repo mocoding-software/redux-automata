@@ -31,6 +31,23 @@ stages:
             inputs:
               arguments: "--new-version $(Build.BuildNumber)"
               ProjectDirectory: $(Build.SourcesDirectory)        
+          - task: SonarCloudPrepare@1
+            displayName: 'Prepare analysis configuration'
+            inputs:
+              SonarCloud: 'SonarCloud'
+              organization: 'mocoding'
+              scannerMode: 'CLI'
+              configMode: 'manual'
+              cliProjectKey: 'mocoding-software_redux-automata'
+              cliProjectName: 'Redux Automata'
+              cliSources: 'src'
+              extraProperties: |
+                # Additional properties that will be passed to the scanner, 
+                # Put one key=value per line, example:
+                # sonar.exclusions=**/*.bin
+                sonar.tests=test
+                sonar.test.inclusions=**/*.spec.ts
+                sonar.typescript.cobertura.reportPaths=$(Build.SourcesDirectory)/.coverage/cobertura-coverage.xml
           - task: Yarn@3
             displayName: "Pack"
             condition:
@@ -42,12 +59,18 @@ stages:
             inputs:
               PathtoPublish: "$(Build.StagingDirectory)/redux-automata-$(Build.BuildNumber).tgz"
               ArtifactName: npm
+          - task: SonarCloudAnalyze@1
+            displayName: 'Run SonarCloud analysis'          
+          - task: SonarCloudPublish@1
+            displayName: 'Publish results on build summary'
+            inputs:
+              pollingTimeoutSec: '300'
           - task: PublishCodeCoverageResults@1
             displayName: "Publich Code Coverage"
             inputs:
               codeCoverageTool: "Cobertura"
               summaryFileLocation: "$(Build.SourcesDirectory)/.coverage/cobertura-coverage.xml"
-            condition: succeededOrFailed()
+            condition: succeededOrFailed()          
   - stage: Deploy
     dependsOn: Build
     condition: and(succeeded(), contains(variables['Build.Reason'], 'PullRequest'))
