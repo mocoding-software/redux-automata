@@ -1,63 +1,82 @@
 {
-    "name": "redux-automata",
-    "version": "2.5.2",
-    "description": "Finite state automata for Redux.",
-    "main": "dist/index",
-    "scripts": {
-        "build": "webpack --config webpack.config.js --progress --color -p || echo not ok",
-        "test": "jest --verbose"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/mocoding-software/redux-automata.git"
-    },
-    "keywords": [
-        "redux",
-        "automata",
-        "state machine",
-        "state",
-        "redux actions",
-        "predictable state",
-        "state chart",
-        "finite state machine",
-        "fsm"
-    ],
-    "author": "MOCODING, LLC",
-    "license": "MIT",
-    "bugs": {
-        "url": "https://github.com/mocoding-software/redux-automata/issues"
-    },
-    "files": [
-        "dist"
-    ],
-    "homepage": "https://github.com/mocoding-software/redux-automata#readme",
-    "devDependencies": {
-        "@types/jest": "^24.0.11",
-        "@types/node": "^11.13.6",
-        "clean-webpack-plugin": "^2.0.1",
-        "jest": "^24.7.1",
-        "ts-jest": "^24.0.2",
-        "ts-loader": "^5.3.3",
-        "tslint": "^5.16.0",
-        "tslint-loader": "^3.5.4",
-        "typescript": "^3.4.4",
-        "webpack": "^4.30.0",
-        "webpack-cli": "^3.3.0"
-    },
-    "dependencies": {
-        "redux": "^4.0.1"
-    },
-    "jest": {
-        "moduleFileExtensions": [
-            "ts",
-            "js"
-        ],
-        "transform": {
-            "\\.(ts)$": "ts-jest"
-        },
-        "testRegex": "/test/.*\\.(ts|js)$",
-        "collectCoverageFrom": [
-            "src/**"
-        ]
-    }
+  "name": "redux-automata",
+  "version": "0.0.0",
+  "description": "Finite state automata for Redux.",
+  "main": "lib/redux-automata.js",
+  "unpkg": "dist/redux-automata.js",
+  "module": "es/redux-automata.js",
+  "scripts": {
+    "clean": "rimraf lib dist es coverage types",
+    "build": "rollup -c",
+    "lint": "eslint --ext ts src test",
+    "test": "jest --verbose --coverage",
+    "prepack": "yarn lint && yarn test && yarn build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mocoding-software/redux-automata.git"
+  },
+  "keywords": [
+    "redux",
+    "automata",
+    "state machine",
+    "state",
+    "redux actions",
+    "predictable state",
+    "state chart",
+    "finite state machine",
+    "fsm"
+  ],
+  "authors": [
+    "MOCODING LLC",
+    "Dennis Miasoutov <me@offbeatful.com> (https://github.com/offbeatful)"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mocoding-software/redux-automata/issues"
+  },
+  "files": [
+    "dist",
+    "lib",
+    "es",
+    "src",
+    "types"
+  ],
+  "homepage": "https://github.com/mocoding-software/redux-automata#readme",
+  "devDependencies": {
+    "@babel/core": "^7.9.6",
+    "@babel/plugin-proposal-object-rest-spread": "^7.9.6",
+    "@babel/plugin-transform-runtime": "^7.9.6",
+    "@babel/preset-env": "^7.9.6",
+    "@babel/preset-typescript": "^7.9.0",
+    "@types/jest": "^25.2.1",
+    "@types/node": "^13.13.5",
+    "@typescript-eslint/eslint-plugin": "^2.31.0",
+    "@typescript-eslint/parser": "^2.31.0",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-only-warn": "^1.0.2",
+    "eslint-plugin-prettier": "^3.1.3",
+    "jest": "^26.0.1",
+    "jest-sonar-reporter": "^2.0.0",
+    "prettier": "^2.0.5",
+    "rimraf": "^3.0.2",
+    "rollup": "^2.8.0",
+    "rollup-plugin-babel": "^4.4.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-replace": "^2.2.0",
+    "rollup-plugin-terser": "^5.3.0",
+    "rollup-plugin-typescript2": "^0.27.0",
+    "ts-jest": "^25.5.0",
+    "typescript": "^3.8.3"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.8.3",
+    "redux": "^4.0.1"
+  },
+  "jestSonar": {
+    "reportPath": ".coverage",
+    "reportFile": "test-report.xml",
+    "indent": 2
+  }
 }

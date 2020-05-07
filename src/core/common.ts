@@ -1,33 +1,40 @@
 import * as Redux from "redux";
 
-export type AutomataState<TState> = TState & { __sm_state?: string } & CanInvokeCapabilities;
+export type AutomataState<TState> = TState & {
+  __sm_state?: string;
+} & CanInvokeCapabilities;
 
 export const ACTION_TYPE_PREFIX = "@@AUTOMATA";
 
 /**
- * Payload type
+ * Payload type. It can be any type.
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type ActionPayload = any;
+
+export type CanInvokeFunction = <TPayload extends ActionPayload = undefined>(
+  action: ActionDefinition<TPayload>,
+) => boolean;
 
 /**
  * Derive state from this interface to get information on possible action transitions in this state
  */
 export interface CanInvokeCapabilities {
-    canInvoke?: <TPayload extends ActionPayload = undefined>(action: ActionDefinition<TPayload>) => boolean;
+  canInvoke?: CanInvokeFunction;
 }
 
 /**
  * Generic action class that contains type and payload.
  */
 export interface PayloadAction<TPayload extends ActionPayload = undefined> extends Redux.AnyAction {
-    payload?: TPayload;
+  payload?: TPayload;
 }
 
 /**
  * Action with dispatch to be processed by automata reducer.
  */
 export interface AutomataAction<TPayload extends ActionPayload = undefined> extends PayloadAction<TPayload> {
-    dispatch: Redux.Dispatch;
+  dispatch: Redux.Dispatch<AutomataAction<TPayload>>;
 }
 
 /**
@@ -35,8 +42,8 @@ export interface AutomataAction<TPayload extends ActionPayload = undefined> exte
  * It is used to define action that could be dispatched and at the same time.
  */
 export interface ActionDefinition<TPayload extends ActionPayload = undefined> {
-    actionType: string;
-    (payload?: TPayload): PayloadAction<TPayload>;
+  actionType: string;
+  (payload?: TPayload): PayloadAction<TPayload>;
 }
 
 /**
@@ -47,49 +54,50 @@ export type TypedReducer<TState, TPayload extends ActionPayload = undefined> = (
 /**
  * Typed Reducer method aka extends Redux.Reducer<TState>
  */
-export interface StateDefinition
-    <TState, TPayload extends ActionPayload = undefined> extends TypedReducer<TState, TPayload> {
-    stateName: string;
+export interface StateDefinition<TState, TPayload extends ActionPayload = undefined>
+  extends TypedReducer<TState, TPayload> {
+  stateName: string;
 }
 
 /**
  * Local store with own getState and Dispatch methods.
  * IMPORTANT: Since version 3.0 `extends Redux.Dispatch<any>` will be removed.
  */
-export interface LocalStore<TState> extends Redux.Dispatch<any> {
-    dispatch: Redux.Dispatch<any>;
-    getState: () => TState;
+export interface LocalStore<TState, TAction extends PayloadAction = Redux.AnyAction> extends Redux.Dispatch<TAction> {
+  dispatch: Redux.Dispatch<TAction>;
+  getState: () => TState;
 }
 
 /**
  * Typed Reducer method aka extends Redux.Reducer<TState>
  */
-export interface StateDefinition
-    <TState, TPayload extends ActionPayload = undefined> extends TypedReducer<TState, TPayload> {
-
-    stateName: string;
+export interface StateDefinition<TState, TPayload extends ActionPayload = undefined>
+  extends TypedReducer<TState, TPayload> {
+  stateName: string;
 }
 
-export type TransitionMethod<TState, TPayload extends ActionPayload = undefined>
-    = (localStore: LocalStore<TState>, arg: TPayload) => void;
+export type TransitionMethod<TState, TPayload extends ActionPayload = undefined> = (
+  localStore: LocalStore<TState>,
+  arg: TPayload,
+) => void;
 
 export interface StateMachineOptions<TState> {
-    in<TPayload extends ActionPayload>(state: StateDefinition<TState, TPayload>): StateFluentOptions<TState>;
-    inAny(): StateFluentOptions<TState>;
+  in<TPayload extends ActionPayload>(state: StateDefinition<TState, TPayload>): StateFluentOptions<TState>;
+  inAny(): StateFluentOptions<TState>;
 }
 
 export interface StateFluentOptions<TState> {
-    on<TPayload extends ActionPayload>(action: ActionDefinition<TPayload>): ActionFluentOptions<TState, TPayload>;
-    or<TPayload extends ActionPayload>(state: StateDefinition<TState, TPayload>): StateFluentOptions<TState>;
+  on<TPayload extends ActionPayload>(action: ActionDefinition<TPayload>): ActionFluentOptions<TState, TPayload>;
+  or<TPayload extends ActionPayload>(state: StateDefinition<TState, TPayload>): StateFluentOptions<TState>;
 }
 
 export interface ActionFluentOptions<TState, TPayload extends ActionPayload = undefined> {
-    goTo(state: StateDefinition<TState, TPayload>): StateFluentOptionsEx<TState>;
-    execute(transition: TransitionMethod<TState, TPayload>): ActionFluentOptions<TState, TPayload>;
-    noop(): StateFluentOptionsEx<TState>;
+  goTo(state: StateDefinition<TState, TPayload>): StateFluentOptionsEx<TState>;
+  execute(transition: TransitionMethod<TState, TPayload>): ActionFluentOptions<TState, TPayload>;
+  noop(): StateFluentOptionsEx<TState>;
 }
 
 export interface StateFluentOptionsEx<TState> {
-    in<TPayload extends ActionPayload>(state: StateDefinition<TState, TPayload>): StateFluentOptions<TState>;
-    on<TPayload extends ActionPayload>(action: ActionDefinition<TPayload>): ActionFluentOptions<TState, TPayload>;
- }
+  in<TPayload extends ActionPayload>(state: StateDefinition<TState, TPayload>): StateFluentOptions<TState>;
+  on<TPayload extends ActionPayload>(action: ActionDefinition<TPayload>): ActionFluentOptions<TState, TPayload>;
+}

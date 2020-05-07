@@ -1,0 +1,118 @@
+# name: $(majorVersion).$(minorVersion).$(patchVersion)$(channelVersion)$(buildVersion)$(Rev:.r)
+
+trigger:
+  branches:
+    include:
+      - master
+  tags:
+    include:
+      - v*
+
+pool:
+  vmImage: "ubuntu-18.04"
+
+stages:
+  - stage: Build
+    jobs:
+      - job: Package
+        steps:
+          - task: UseGitVersion@5
+            displayName: "Git Version"
+            inputs:
+              versionSpec: "5.0.0"
+              useConfigFile: true
+              configFilePath: "$(Build.SourcesDirectory)/GitVersion.yml"
+          - task: Yarn@3
+            displayName: "Install"
+            inputs:
+              ProjectDirectory: $(Build.SourcesDirectory)
+          - task: Yarn@3
+            displayName: "Update version"
+            inputs:
+              arguments: "version --new-version $(Build.BuildNumber) --no-git-tag-version"
+              ProjectDirectory: $(Build.SourcesDirectory)        
+          - task: SonarCloudPrepare@1
+            displayName: 'Prepare analysis configuration'
+            inputs:
+              SonarCloud: 'SonarCloud'
+              organization: 'mocoding'
+              scannerMode: 'CLI'
+              configMode: 'manual'
+              cliProjectKey: 'mocoding-software_redux-automata'
+              cliProjectName: 'Redux Automata'
+              cliSources: 'src'
+              extraProperties: |
+                # Additional properties that will be passed to the scanner, 
+                # Put one key=value per line, example:
+                # sonar.exclusions=**/*.bin                
+                sonar.tests=test
+                sonar.test.inclusions=**/*.spec.ts
+                sonar.testExecutionReportPaths=$(Build.SourcesDirectory)/.coverage/test-report.xml
+                sonar.typescript.lcov.reportPaths=$(Build.SourcesDirectory)/.coverage/lcov.info
+          - task: Yarn@3
+            displayName: "Pack"
+            condition:
+            inputs:
+              arguments: "pack --filename $(Build.StagingDirectory)/redux-automata-$(Build.BuildNumber).tgz"
+              projectDirectory: "$(Build.SourcesDirectory)/packages/redux-automata"
+          - task: PublishBuildArtifacts@1
+            displayName: "Publish"
+            inputs:
+              PathtoPublish: "$(Build.StagingDirectory)/redux-automata-$(Build.BuildNumber).tgz"
+              ArtifactName: npm
+          - task: SonarCloudAnalyze@1
+            displayName: 'Run SonarCloud analysis'          
+          - task: SonarCloudPublish@1
+            displayName: 'Publish results on build summary'
+            inputs:
+              pollingTimeoutSec: '300'
+          - task: PublishCodeCoverageResults@1
+            displayName: "Publich Code Coverage"
+            inputs:
+              codeCoverageTool: "Cobertura"
+              summaryFileLocation: "$(Build.SourcesDirectory)/.coverage/cobertura-coverage.xml"
+            condition: succeededOrFailed()          
+  - stage: Deploy
+    dependsOn: Build
+    condition: and(succeeded(), contains(variables['Build.Reason'], 'PullRequest'))
+    jobs:
+      - deployment: DevBuild
+        environment: "dev-builds"
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - task: Npm@1
+                  displayName: "Publish to npm (dev-builds)"
+                  inputs:
+                    command: "custom"
+                    customCommand: "publish $(Pipeline.Workspace)/npm/redux-automata-$(Build.BuildNumber).tgz"
+                    customRegistry: "useFeed"
+                    customFeed: "da7703d4-fb22-4933-b869-83f4264b7b84/e1336e71-3540-4a0c-830c-639112685b07"
+  - stage: Release
+    dependsOn: Build
+    condition: and(succeeded(), contains(variables['Build.SourceBranch'], 'tags/v'))
+    pool:
+      vmImage: "ubuntu-18.04"
+    jobs:
+      - deployment: Public
+        environment: "public"
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - task: GitHubRelease@1
+                  displayName: "Update GitHub release"
+                  inputs:
+                    gitHubConnection: "mocoding-software"
+                    repositoryName: "mocoding-software/redux-automata"
+                    action: edit
+                    tag: "v$(Build.BuildNumber)"
+                    assets: "$(Pipeline.Workspace)/**/*.tgz"
+                    assetUploadMode: replace
+                - task: Npm@1
+                  displayName: "Publish to npm"
+                  inputs:
+                    command: "custom"
+                    customCommand: "publish --access public $(Pipeline.Workspace)/npm/redux-automata-$(Build.BuildNumber).tgz"
+                    customEndpoint: "public-npm"

@@ -1,0 +1,4 @@
+{
+  "appEntry": "./basic",
+  "bootstrapModule": "@mocoding/react-app-router-redux"
+}

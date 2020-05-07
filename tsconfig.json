@@ -1,29 +1,32 @@
 {
-	"compilerOptions": {
-		"experimentalDecorators": true,		
-		"module": "commonjs",
-		"target": "es5",
-		"noImplicitAny": true,		
-		"moduleResolution": "node",
-		"emitDecoratorMetadata": true,
-		"sourceMap": true,
-		"declaration": true,
-		"outDir": "dist",		
-		"removeComments": true,
-		"baseUrl": "./src",
-        "strict": true,
-        "lib": [
-            "es6"            
-        ],
-        "types":[
-            "node", "jest"
-        ]
-	},
-	"files": [
-		"src/index.ts"
-	],
-	"exclude": [
-		"node_modules",
-		"examples"
-	]
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "module": "esnext",
+    "target": "ES6",
+    "noImplicitAny": true,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "esModuleInterop": true,
+    "sourceMap": true,
+    "declaration": true,
+    "outDir": "dist",
+    "strictNullChecks": true,
+    "removeComments": true,
+    "baseUrl": "./src",
+    "strict": true,
+    "lib": [
+      "es6"
+    ],
+    "types": [
+      "node",
+      "jest"
+    ]
+  },
+  "include": [
+    "src/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "examples"
+  ]
 }

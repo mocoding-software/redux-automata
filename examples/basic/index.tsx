@@ -1,34 +1,43 @@
 import * as React from "react";
-import * as ReactDOM from "react-dom";
+import { Button, Container, Jumbotron } from "reactstrap";
 import * as Redux from "redux";
-import { automataMiddleware } from "redux-automata";
+import { SwitcherState, Toggle, basicAutomata } from "./basic-automata";
+import { Statechart } from "./Statechart";
+import { connect } from "react-redux";
+import { ApplicationState } from "./store";
 
-import App from "./app";
-import { reducer, State } from "./basic-automata";
+import "bootstrap/dist/css/bootstrap.css";
 
-const createLogger = require("redux-logger").createLogger;
-const AppContainer = require("react-hot-loader").AppContainer;
-
-// constructing store
-const pipeline = Redux.applyMiddleware(
-    automataMiddleware, // adding automata Middleware
-    createLogger()
-);
-const store = Redux.createStore(reducer, Redux.compose(pipeline));
-
-// run application
-const mount = document.getElementById("app");
-const RunApplication = () => {
-    ReactDOM.render(<AppContainer><App store={store} /></AppContainer>, mount);
+interface AppProps {
+  switcher?: SwitcherState;
 }
-RunApplication();
 
-// hot reload
-declare var module: any;
-if (module.hot) {
-    module.hot.accept("./app", () => {
-        require("./app");
-        // re-run client
-        RunApplication();
-    });
+interface AppDispatch {
+  toggle?: () => void;
 }
+
+class AppInternal extends React.Component<AppProps & AppDispatch> {
+  public render(): React.ReactNode {
+    return (
+      <Container>
+        <Jumbotron>
+          <h1>{this.props.switcher ? this.props.switcher.message : ""}</h1>
+          <Button color="primary"  onClick={this.props.toggle}>
+            Toggle
+          </Button>
+        </Jumbotron>
+        <Jumbotron>
+          <h1>Statechart</h1>
+          <Statechart automata={basicAutomata} />
+        </Jumbotron>
+      </Container>
+    );
+  }
+}
+
+const App = connect<AppProps, AppDispatch, {}, ApplicationState>(
+  (state) => ({ switcher: state.switcher }),
+  (dispatch: Redux.Dispatch) => ({ toggle: () => dispatch(Toggle()) }),
+)(AppInternal);
+
+export { App };
