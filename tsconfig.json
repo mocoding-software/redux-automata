@@ -10,6 +10,7 @@
     "sourceMap": true,
     "declaration": true,
     "outDir": "dist",
+    "strictNullChecks": true,
     "removeComments": true,
     "baseUrl": "./src",
     "strict": true,
