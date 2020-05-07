@@ -53,6 +53,10 @@ export function automataReducer<TState>(automata: Automata<TState>): Redux.Reduc
       automata.current = newState;
     }
 
+    if (!action.dispatch) {
+      throw new Error("Dispatch is not defined to perform transitions. It seems `automataMiddleware` was not applied.");
+    }
+
     const localStore: LocalStore<TState> = Object.assign(action.dispatch, {
       dispatch: action.dispatch,
       getState: () => automata.current,
