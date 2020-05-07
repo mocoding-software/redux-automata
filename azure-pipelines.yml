@@ -29,8 +29,8 @@ stages:
           - task: Yarn@3
             displayName: "Update version"
             inputs:
+              arguments: "--new-version $(Build.BuildNumber)"
               ProjectDirectory: $(Build.SourcesDirectory)
-            arguments: "--new-version $(Build.BuildNumber)"          
           - task: Yarn@3
             displayName: "$Pack"
             condition:
