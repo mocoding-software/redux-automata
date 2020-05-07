@@ -45,6 +45,7 @@ stages:
                 # Additional properties that will be passed to the scanner, 
                 # Put one key=value per line, example:
                 # sonar.exclusions=**/*.bin
+                sonar.verbose=true
                 sonar.tests=test
                 sonar.test.inclusions=**/*.spec.ts
                 sonar.typescript.cobertura.reportPaths=$(Build.SourcesDirectory)/.coverage/cobertura-coverage.xml
