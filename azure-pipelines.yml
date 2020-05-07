@@ -44,7 +44,8 @@ stages:
               extraProperties: |
                 # Additional properties that will be passed to the scanner, 
                 # Put one key=value per line, example:
-                # sonar.exclusions=**/*.bin                
+                # sonar.exclusions=**/*.bin
+                -X
                 sonar.tests=test
                 sonar.test.inclusions=**/*.spec.ts
                 sonar.testExecutionReportPaths=$(Build.SourcesDirectory)/.coverage/test-report.xml
