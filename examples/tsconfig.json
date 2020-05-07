@@ -1,26 +1,10 @@
 {
-	"compilerOptions": {
- 		"sourceMap": true,
-        "noImplicitAny": true,
-        "moduleResolution": "node",   
-        "module": "commonjs",
-        "target": "es5",
-        "jsx": "react",
-        "skipLibCheck": true,
-        "experimentalDecorators": true,        
-        "lib": [
-            "es6",
-            "dom"
-        ],
-        "types": [
-            "node", "isomorphic-fetch"
-        ],
-		"baseUrl": ".",
-		"paths": {
-      		"redux-automata": ["../src"]
-		}    
-	},
-	"exclude": [
-		"node_modules"
-	]
+  "extends": "@mocoding/react-app-common/tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "redux-automata": ["../src"]
+    }
+  },
+  "include": ["async/*", "basic/*", "./typings.d.ts"]
 }

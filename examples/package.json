@@ -1,38 +1,26 @@
 {
-    "name": "examples",
-    "version": "1.0.0",
-    "description": "Provides a set of examples.",
-    "scripts": {
-        "basic": "webpack-dev-server --config configs/basic.js --port 3000 --hot",
-        "async": "webpack-dev-server --config configs/async.js --port 3000 --hot"
-    },
-    "author": "MOCODING, LLC",
-    "license": "MIT",
-    "dependencies": {        
-        "isomorphic-fetch": "2.2.1",
-        "react": "16.8.6",
-        "react-bootstrap": "0.32.4",
-        "react-dom": "16.8.6",
-        "redux": "4.0.1",
-        "react-redux": "7.0.2",
-        "redux-logger": "3.0.6",
-        "react-graph-vis": "1.0.2"
-    },
-    "devDependencies": {        
-        "@types/node": "11.13.6",
-        "@types/isomorphic-fetch": "0.0.35",
-        "@types/react": "16.8.14",
-        "@types/react-bootstrap": "0.32.17",
-        "@types/react-dom": "16.8.4",
-        "@types/react-redux": "7.0.8",        
-        "clean-webpack-plugin": "2.0.1",
-        "html-webpack-plugin": "3.2.0",
-        "html-webpack-template": "6.2.0",
-        "react-hot-loader": "4.8.4",
-        "ts-loader": "5.3.3",
-        "typescript": "3.4.4",
-        "webpack": "4.30.0",
-        "webpack-dev-server": "3.3.1",
-        "webpack-cli": "3.3.0"
-    }
+  "name": "examples",
+  "version": "1.0.0",
+  "description": "Provides a set of examples.",
+  "scripts": {
+    "basic": "moapp serve --config configs/basic.json",
+    "async": "moapp serve --config configs/async.json"
+  },
+  "author": "MOCODING, LLC",
+  "license": "MIT",
+  "dependencies": {
+    "isomorphic-fetch": "^2.2.1",
+    "reactstrap": "^8.4.1",
+    "bootstrap": "^4.4.1",
+    "react-graph-vis": "^1.0.5"
+  },
+  "devDependencies": {
+    "@types/reactstrap": "^8.4.2",
+    "@mocoding/react-app": "^1.0.0",
+    "@mocoding/react-app-router-redux": "^1.0.0"
+  },
+  "eslintConfig": {
+    "extends": "@mocoding/eslint-config"
+  },
+  "prettier": "@mocoding/eslint-config/prettier"
 }

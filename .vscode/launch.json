@@ -1,23 +1,36 @@
 {
-    "version": "0.2.0",
-    "configurations": [{
-        "name": "Tests",
-        "type": "node",
-        "request": "launch",
-        "program": "${workspaceRoot}/node_modules/jest-cli/bin/jest.js",
-        "stopOnEntry": false,
-        "args": ["--runInBand", "--no-cache"],
-        "cwd": "${workspaceRoot}",        
-        "preLaunchTask": null,
-        "runtimeExecutable": null,
-        "runtimeArgs": [
-            "--nolazy"
-        ],
-        "env": {
-            "NODE_ENV": "development"
-        },
-        "console": "internalConsole",
-        "sourceMaps": true,
-        "outFiles": ["${workspaceRoot}/dist"]
-    }] 
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "name": "Debug Basic Example",
+      "request": "launch",
+      "program": "${workspaceRoot}/examples/node_modules/.bin/moapp",
+      "args": ["serve", "-c", "examples/configs/basic.json"],
+      "outFiles": ["${workspaceRoot}/examples/react-app/lib/**/*.js"],
+      "cwd": "${workspaceRoot}",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "disableOptimisticBPs": true,
+      "preLaunchTask": "build"
+    },
+    {
+      "name": "Tests",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceRoot}/node_modules/jest-cli/bin/jest.js",
+      "stopOnEntry": false,
+      "args": ["--runInBand", "--no-cache"],
+      "cwd": "${workspaceRoot}",
+      "preLaunchTask": null,
+      "runtimeExecutable": null,
+      "runtimeArgs": ["--nolazy"],
+      "env": {
+        "NODE_ENV": "development"
+      },
+      "console": "internalConsole",
+      "sourceMaps": true,
+      "outFiles": ["${workspaceRoot}/dist"]
+    }
+  ]
 }
