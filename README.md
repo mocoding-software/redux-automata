@@ -364,4 +364,4 @@ License
 
 [The MIT License](https://raw.githubusercontent.com/mocoding-software/redux-automata/master/LICENSE)
 
-COPYRIGHT (C) 2018 MOCODING, LLC
+COPYRIGHT (C) 2020 MOCODING, LLC
