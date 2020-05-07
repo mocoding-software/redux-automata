@@ -1,7 +1,7 @@
 {
   "collectCoverageFrom": ["src/**"],
   "coverageDirectory": ".coverage",
-  "coverageReporters": ["cobertura", "text"],
+  "coverageReporters": ["cobertura", "lcov", "text"],
   "coverageThreshold": {
     "global": {
       "branches": 80,
@@ -12,6 +12,7 @@
   },
   "moduleFileExtensions": ["ts", "js"],
   "testRegex": "/test/.*\\.(ts|js)$",
+  "testResultsProcessor": "jest-sonar-reporter",
   "transform": {
     "\\.(ts)$": "ts-jest"
   }

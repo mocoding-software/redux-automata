@@ -44,11 +44,11 @@ stages:
               extraProperties: |
                 # Additional properties that will be passed to the scanner, 
                 # Put one key=value per line, example:
-                # sonar.exclusions=**/*.bin
-                sonar.verbose=true
+                # sonar.exclusions=**/*.bin                
                 sonar.tests=test
                 sonar.test.inclusions=**/*.spec.ts
-                sonar.typescript.cobertura.reportPaths=$(Build.SourcesDirectory)/.coverage/cobertura-coverage.xml
+                sonar.testExecutionReportPaths=$(Build.SourcesDirectory)/.coverage/test-report.xml
+                sonar.typescript.lcov.reportPaths=$(Build.SourcesDirectory)/.coverage/lcov.info
           - task: Yarn@3
             displayName: "Pack"
             condition:
