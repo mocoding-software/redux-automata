@@ -10,7 +10,7 @@ import {
 } from "./common";
 
 export function automataReducer<TState>(automata: Automata<TState>): Redux.Reducer<TState> {
-  if (automata.initial === undefined)
+  if (automata.initial.__sm_state === undefined)
     throw new Error("No initial state specified. Use BeginWith() method to specify initial state.");
 
   automata.current = automata.initial;

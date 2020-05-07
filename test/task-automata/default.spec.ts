@@ -35,7 +35,7 @@ describe("Task Automata", () => {
     return promise.then(() => {
       const currentState = store.getState() as AutomataState<TaskState<Data, Error>>;
       expect(currentState.__sm_state).toBe(automata.Completed.stateName);
-      expect(currentState.result!.message).toBe("data"); // this should remaing the same.
+      expect(currentState.result?.message).toBe("data"); // this should remaing the same.
     });
   });
 });

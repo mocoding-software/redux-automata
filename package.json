@@ -9,7 +9,7 @@
     "clean": "rimraf lib dist es coverage types",
     "build": "rollup -c",
     "lint": "eslint --ext ts src test",
-    "test": "jest --verbose"
+    "test": "jest --verbose --coverage"
   },
   "repository": {
     "type": "git",
@@ -71,18 +71,5 @@
   "dependencies": {
     "redux": "^4.0.1",
     "@babel/runtime": "^7.8.3"
-  },
-  "jest": {
-    "moduleFileExtensions": [
-      "ts",
-      "js"
-    ],
-    "transform": {
-      "\\.(ts)$": "ts-jest"
-    },
-    "testRegex": "/test/.*\\.(ts|js)$",
-    "collectCoverageFrom": [
-      "src/**"
-    ]
   }
 }

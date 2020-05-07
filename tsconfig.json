@@ -2,7 +2,7 @@
   "compilerOptions": {
     "experimentalDecorators": true,
     "module": "esnext",
-    "target": "esnext",
+    "target": "ES6",
     "noImplicitAny": true,
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,

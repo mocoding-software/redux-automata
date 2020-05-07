@@ -1,0 +1,18 @@
+{
+  "collectCoverageFrom": ["src/**"],
+  "coverageDirectory": ".coverage",
+  "coverageReporters": ["cobertura", "text"],
+  "coverageThreshold": {
+    "global": {
+      "branches": 80,
+      "functions": 80,
+      "lines": 80,
+      "statements": 80
+    }
+  },
+  "moduleFileExtensions": ["ts", "js"],
+  "testRegex": "/test/.*\\.(ts|js)$",
+  "transform": {
+    "\\.(ts)$": "ts-jest"
+  }
+}

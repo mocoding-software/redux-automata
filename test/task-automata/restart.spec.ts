@@ -30,19 +30,19 @@ describe("Restart Task Automata", () => {
     return promise.then(() => {
       let currentState = store.getState() as AutomataState<TaskState<Data, Error>>;
       expect(currentState.__sm_state).toBe(automata.Completed.stateName);
-      expect(currentState.result!.message).toBe("Expected Message");
+      expect(currentState.result?.message).toBe("Expected Message");
 
       store.dispatch(automata.Restart("Expected Message2"));
 
       currentState = store.getState() as AutomataState<TaskState<Data, Error>>;
       expect(currentState.__sm_state).toBe(automata.Processing.stateName);
       expect(currentState.isProcessing).toBeTruthy();
-      expect(currentState.result!.message).toBe("Expected Message"); // this should remain the same.
+      expect(currentState.result?.message).toBe("Expected Message"); // this should remain the same.
 
       return promise.then(() => {
         currentState = store.getState() as AutomataState<TaskState<Data, Error>>;
         expect(currentState.__sm_state).toBe(automata.Completed.stateName);
-        expect(currentState.result!.message).toBe("Expected Message2"); // this should remain the same.
+        expect(currentState.result?.message).toBe("Expected Message2"); // this should remain the same.
       });
     });
   });

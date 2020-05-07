@@ -22,6 +22,5 @@ module.exports = {
   plugins: ["prettier", "@typescript-eslint"],
   rules: {   
     "@typescript-eslint/explicit-function-return-type": "off",
-    "@typescript-eslint/no-non-null-assertion": "off"
   },  
 };
