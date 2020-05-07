@@ -30,7 +30,7 @@ stages:
             displayName: "Update version"
             inputs:
               ProjectDirectory: $(Build.SourcesDirectory)
-              arguments: "version $(Build.BuildNumber)"
+            arguments: "--new-version $(Build.BuildNumber)"          
           - task: Yarn@3
             displayName: "$Pack"
             condition:
@@ -42,6 +42,12 @@ stages:
             inputs:
               PathtoPublish: "$(Build.StagingDirectory)/redux-automata-$(Build.BuildNumber).tgz"
               ArtifactName: npm
+          - task: PublishCodeCoverageResults@1
+            displayName: "Public Code Coverage"
+            inputs:
+              codeCoverageTool: "Cobertura"
+              summaryFileLocation: "$(Build.StagingDirectory)/.coverage/cobertura-coverage.xml"
+            condition: succeededOrFailed()
   - stage: Deploy
     dependsOn: Build
     condition: and(succeeded(), contains(variables['Build.Reason'], 'PullRequest'))
