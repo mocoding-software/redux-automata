@@ -9,24 +9,15 @@
     "esModuleInterop": true,
     "sourceMap": true,
     "declaration": true,
+    "declarationDir": "./types",
     "outDir": "dist",
     "strictNullChecks": true,
     "removeComments": true,
     "baseUrl": "./src",
     "strict": true,
-    "lib": [
-      "es6"
-    ],
-    "types": [
-      "node",
-      "jest"
-    ]
+    "lib": ["es6"],
+    "types": ["node", "jest"]
   },
-  "include": [
-    "src/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "examples"
-  ]
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules", "examples"]
 }

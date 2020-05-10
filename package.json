@@ -5,6 +5,7 @@
   "main": "lib/redux-automata.js",
   "unpkg": "dist/redux-automata.js",
   "module": "es/redux-automata.js",
+  "types": "types/index.d.ts",
   "scripts": {
     "clean": "rimraf lib dist es coverage types",
     "build": "rollup -c",
