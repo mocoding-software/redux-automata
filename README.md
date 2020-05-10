@@ -8,6 +8,9 @@
 
 [![npm][npm-image]][npm-url]
 [![deps][deps]][deps-url]
+[![Build Status][azure-pipelines]][azure-pipelines-url]
+[![Coverage][sonar-coverage]][sonar-url]
+<br/>
 
 # Finite state machine for Redux
 
@@ -358,6 +361,14 @@ Email: [social@mocoding.com](mailto:social@mocoding.com)
 
 [deps]: https://img.shields.io/david/mocoding-software/redux-automata.svg
 [deps-url]: https://david-dm.org/mocoding-software/redux-automata
+
+[azure-pipelines]: https://dev.azure.com/mocoding/GitHub/_apis/build/status/mocoding-software.redux-automata?branchName=master
+[azure-pipelines-url]: https://dev.azure.com/mocoding/GitHub/_build/latest?definitionId=110&branchName=master
+
+[sonar-url]: https://sonarcloud.io/dashboard?id=mocoding-software_redux-automata
+
+[sonar-coverage]: https://sonarcloud.io/api/project_badges/measure?project=mocoding-software_redux-automata&metric=coverage
+
 
 License
 =======
