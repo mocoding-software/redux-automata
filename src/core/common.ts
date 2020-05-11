@@ -1,8 +1,10 @@
 import * as Redux from "redux";
 
-export type AutomataState<TState> = TState & {
-  __sm_state?: string;
-} & CanInvokeCapabilities;
+export interface InternalProps {
+  __sm_state: string;
+}
+
+export type AutomataState<TState> = TState & Partial<InternalProps>;
 
 export const ACTION_TYPE_PREFIX = "@@AUTOMATA";
 
@@ -12,16 +14,7 @@ export const ACTION_TYPE_PREFIX = "@@AUTOMATA";
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type ActionPayload = any;
 
-export type CanInvokeFunction = <TPayload extends ActionPayload = undefined>(
-  action: ActionDefinition<TPayload>,
-) => boolean;
-
-/**
- * Derive state from this interface to get information on possible action transitions in this state
- */
-export interface CanInvokeCapabilities {
-  canInvoke?: CanInvokeFunction;
-}
+export type IsInvokableFunction = <TState>(state: AutomataState<TState>) => boolean;
 
 /**
  * Generic action class that contains type and payload.
@@ -43,6 +36,7 @@ export interface AutomataAction<TPayload extends ActionPayload = undefined> exte
  */
 export interface ActionDefinition<TPayload extends ActionPayload = undefined> {
   actionType: string;
+  isInvokable: IsInvokableFunction;
   (payload?: TPayload): PayloadAction<TPayload>;
 }
 

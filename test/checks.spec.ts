@@ -32,6 +32,14 @@ describe("Checks", () => {
     );
   });
 
+  test("Invalid State Name", () => {
+    const automata = new Automata<TestState>("Empty");
+
+    const message = "State name can't be empty, null or undefined.";
+
+    expect(() => automata.state("", () => ({ value: undefined }))).toThrowError(message);
+  });
+
   test("Middleware Exist Check", () => {
     jest.useFakeTimers();
     const automata = new Automata<TestState>("Default State");

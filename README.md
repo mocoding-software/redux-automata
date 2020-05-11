@@ -235,12 +235,12 @@ export interface LocalStore<TState> extends Redux.Dispatch<any> {
 Sometimes it is useful to know whenever certain actions are "enabled" for specific state. 
 Best use case to describe this scenario is to disable button during async request. 
 In example above automata is switched to Fetching State so it no longer respond to Fetch action.
-To access this functionality you may use canInvoke method that becomes availible on state instance maintained by automata.
+To access this functionality you may use `isInvokable` method on action and pass current state
 
 ```typescript
     
 import { ResponseState, Refresh } from './fetch-automata';
-import { CanInvokeCapabilities } from 'redux-automata';
+
 
 const { connect } = require('react-redux');
 
@@ -251,9 +251,9 @@ interface ViewProps {
 }
 
 @connect(
-    (state: ResponseState & CanInvokeCapabilities) => ({
+    (state: ResponseState) => ({
         response: state,
-        canRefresh: state.canInvoke(Refresh)
+        canRefresh: Refresh.isInvokable(state)
     }),
     (dispatch: Redux.Dispatch<any>) => ({        
         refresh: () => dispatch(Refresh()),

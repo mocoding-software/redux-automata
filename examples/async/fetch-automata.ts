@@ -1,8 +1,8 @@
 /* eslint-disable prettier/prettier */
 import * as Redux from "redux";
-import { Automata, CanInvokeCapabilities, automataReducer } from "redux-automata";
+import { Automata, automataReducer } from "redux-automata";
 
-export interface ResponseState extends CanInvokeCapabilities {
+export interface ResponseState{
   isFetching?: boolean;
   error?: string;
   data?: GithubResposne;
