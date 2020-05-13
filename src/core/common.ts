@@ -19,14 +19,14 @@ export type IsInvokableFunction = <TState>(state: AutomataState<TState>) => bool
 /**
  * Generic action class that contains type and payload.
  */
-export interface PayloadAction<TPayload extends ActionPayload = undefined> extends Redux.AnyAction {
+export interface PayloadAction<TPayload extends ActionPayload = void> extends Redux.AnyAction {
   payload?: TPayload;
 }
 
 /**
  * Action with dispatch to be processed by automata reducer.
  */
-export interface AutomataAction<TPayload extends ActionPayload = undefined> extends PayloadAction<TPayload> {
+export interface AutomataAction<TPayload extends ActionPayload = void> extends PayloadAction<TPayload> {
   dispatch: Redux.Dispatch<AutomataAction<TPayload>>;
 }
 
@@ -34,22 +34,21 @@ export interface AutomataAction<TPayload extends ActionPayload = undefined> exte
  * Function to create state machine actions. Very similar to what ActionCreator is.
  * It is used to define action that could be dispatched and at the same time.
  */
-export interface ActionDefinition<TPayload extends ActionPayload = undefined> {
+export interface ActionDefinition<TPayload extends ActionPayload = void> {
   actionType: string;
   isInvokable: IsInvokableFunction;
-  (payload?: TPayload): PayloadAction<TPayload>;
+  (payload: TPayload): PayloadAction<TPayload>;
 }
 
 /**
  * Typed Reducer method aka extends Redux.Reducer<TState>
  */
-export type TypedReducer<TState, TPayload extends ActionPayload = undefined> = (state: TState, arg: TPayload) => TState;
+export type TypedReducer<TState, TPayload extends ActionPayload = void> = (state: TState, arg: TPayload) => TState;
 
 /**
  * Typed Reducer method aka extends Redux.Reducer<TState>
  */
-export interface StateDefinition<TState, TPayload extends ActionPayload = undefined>
-  extends TypedReducer<TState, TPayload> {
+export interface StateDefinition<TState, TPayload extends ActionPayload = void> extends TypedReducer<TState, TPayload> {
   stateName: string;
 }
 
@@ -65,12 +64,11 @@ export interface LocalStore<TState, TAction extends PayloadAction = Redux.AnyAct
 /**
  * Typed Reducer method aka extends Redux.Reducer<TState>
  */
-export interface StateDefinition<TState, TPayload extends ActionPayload = undefined>
-  extends TypedReducer<TState, TPayload> {
+export interface StateDefinition<TState, TPayload extends ActionPayload = void> extends TypedReducer<TState, TPayload> {
   stateName: string;
 }
 
-export type TransitionMethod<TState, TPayload extends ActionPayload = undefined> = (
+export type TransitionMethod<TState, TPayload extends ActionPayload = void> = (
   localStore: LocalStore<TState>,
   arg: TPayload,
 ) => void;
@@ -85,7 +83,7 @@ export interface StateFluentOptions<TState> {
   or<TPayload extends ActionPayload>(state: StateDefinition<TState, TPayload>): StateFluentOptions<TState>;
 }
 
-export interface ActionFluentOptions<TState, TPayload extends ActionPayload = undefined> {
+export interface ActionFluentOptions<TState, TPayload extends ActionPayload = void> {
   goTo(state: StateDefinition<TState, TPayload>): StateFluentOptionsEx<TState>;
   execute(transition: TransitionMethod<TState, TPayload>): ActionFluentOptions<TState, TPayload>;
   noop(): StateFluentOptionsEx<TState>;
