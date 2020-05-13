@@ -77,13 +77,13 @@ describe("Conditional Transitions", () => {
     expect(currentState.processing).toBeTruthy();
   });
 
-  test("Can Invoke Test", () => {
+  test("Is Invokable Test", () => {
     store.dispatch(StartProcess());
 
-    const canInvoke = store.getState().process.canInvoke;
-    if (!canInvoke) fail();
-    expect(canInvoke(CancelProcess)).toBeTruthy()
-    expect(canInvoke(StartProcess)).toBeFalsy()
+    const state = store.getState().process;
+    
+    expect(CancelProcess.isInvokable(state)).toBeTruthy()
+    expect(StartProcess.isInvokable(state)).toBeFalsy()
   });
 
   test("Cancel Test", () => {

@@ -49,7 +49,7 @@ export class Statechart extends React.Component<StatechartProps, any> {
 
     return (
       <Graph
-        identifier='automata-graph'
+        identifier="automata-graph"
         graph={graph}
         options={options}
         events={events}

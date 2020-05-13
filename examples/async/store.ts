@@ -8,7 +8,7 @@ export interface ApplicationState {
   response: ResponseState;
 }
 
-const middlewares: Redux.Middleware[] = [ automataMiddleware ];
+const middlewares: Redux.Middleware[] = [automataMiddleware];
 const reducers: Redux.ReducersMapObject<ApplicationState> = {
   response: reducer,
 };

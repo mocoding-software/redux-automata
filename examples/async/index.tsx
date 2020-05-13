@@ -28,7 +28,7 @@ interface ViewProps {
 @connect(
   (state: ApplicationState) => ({
     response: state.response,
-    canRefresh: state.response.canInvoke && state.response.canInvoke(Refresh),
+    canRefresh: Refresh.isInvokable(state.response),
   }),
   (dispatch: Redux.Dispatch<any>) => ({
     load: () => dispatch(Fetch()),

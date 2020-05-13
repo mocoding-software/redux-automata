@@ -1,13 +1,6 @@
 import * as Redux from "redux";
 import { Automata } from "./Automata";
-import {
-  ACTION_TYPE_PREFIX,
-  ActionDefinition,
-  ActionPayload,
-  AutomataState,
-  LocalStore,
-  CanInvokeFunction,
-} from "./common";
+import { ACTION_TYPE_PREFIX, ActionPayload, AutomataState, LocalStore } from "./common";
 
 export function automataReducer<TState>(automata: Automata<TState>): Redux.Reducer<TState> {
   if (automata.initial.__sm_state === undefined)
@@ -19,11 +12,6 @@ export function automataReducer<TState>(automata: Automata<TState>): Redux.Reduc
   const currentNode = nodes.find((_) => _.entry.stateName === automata.current.__sm_state);
 
   if (!currentNode) throw new Error("Can't find initial state.");
-
-  automata.current = Object.assign(automata.current, {
-    canInvoke: <TAction>(action: ActionDefinition<TAction>) =>
-      currentNode.actions.findIndex((_) => _.actionType === action.actionType) > -1,
-  });
 
   return <TPayload extends ActionPayload>(state: AutomataState<TState> = automata.initial, action: Redux.AnyAction) => {
     // skip if not state machine;
@@ -42,14 +30,9 @@ export function automataReducer<TState>(automata: Automata<TState>): Redux.Reduc
       if (!nextNode) throw new Error("Can't find state " + stateAction.targetState);
 
       automata.current = state;
-      const nextState = nextNode.entry(state, action.payload);
-      const canInvoke: CanInvokeFunction = <TAction>(actionFunc: ActionDefinition<TAction>) =>
-        nextNode.actions.findIndex((_) => _.actionType === actionFunc.actionType) > -1;
-      newState = Object.assign(nextState, {
-        // eslint-disable-next-line @typescript-eslint/camelcase
-        __sm_state: nextNode.entry.stateName,
-        canInvoke,
-      });
+      newState = nextNode.entry(state, action.payload);
+      // eslint-disable-next-line @typescript-eslint/camelcase
+      newState.__sm_state = nextNode.entry.stateName;
       automata.current = newState;
     }
 
