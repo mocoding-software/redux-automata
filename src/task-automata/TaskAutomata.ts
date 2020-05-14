@@ -4,7 +4,7 @@ import { Task, TaskComplete, TaskState } from "./common";
 
 export class TaskAutomata<
   TResult,
-  TInput = undefined,
+  TInput = void,
   TError extends Error = Error,
   TState extends TaskState<TResult, TError> = TaskState<TResult, TError>
 > extends Automata<TState> {

@@ -58,7 +58,7 @@ export class Automata<TState> implements StateMachineOptions<TState> {
     });
   }
 
-  public state<TActionPayload extends ActionPayload = undefined>(
+  public state<TActionPayload extends ActionPayload = void>(
     name: string,
     reducer: TypedReducer<TState, TActionPayload>,
   ): StateDefinition<TState, TActionPayload> {
@@ -72,7 +72,7 @@ export class Automata<TState> implements StateMachineOptions<TState> {
     return newState;
   }
 
-  public action<TActionPayload extends ActionPayload = undefined>(type: string): ActionDefinition<TActionPayload> {
+  public action<TActionPayload extends ActionPayload = void>(type: string): ActionDefinition<TActionPayload> {
     this.graphCache = undefined;
     const actionType = ACTION_TYPE_PREFIX + " " + this.automataName + " / " + type;
 

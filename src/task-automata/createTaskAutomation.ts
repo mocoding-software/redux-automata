@@ -5,7 +5,7 @@ import { TaskAutomata } from "./TaskAutomata";
 
 export interface TaskAutomation<
   TResult,
-  TInput = undefined,
+  TInput = void,
   TError extends Error = Error,
   TState extends TaskState<TResult, TError> = TaskState<TResult, TError>
 > {
@@ -17,7 +17,7 @@ export interface TaskAutomation<
 
 export function createTaskAutomation<
   TResult,
-  TInput = undefined,
+  TInput = void,
   TError extends Error = Error,
   TState extends TaskState<TResult, TError> = TaskState<TResult, TError>
 >(
