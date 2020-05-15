@@ -61,13 +61,6 @@ export interface LocalStore<TState, TAction extends PayloadAction = Redux.AnyAct
   getState: () => TState;
 }
 
-/**
- * Typed Reducer method aka extends Redux.Reducer<TState>
- */
-export interface StateDefinition<TState, TPayload extends ActionPayload = void> extends TypedReducer<TState, TPayload> {
-  stateName: string;
-}
-
 export type TransitionMethod<TState, TPayload extends ActionPayload = void> = (
   localStore: LocalStore<TState>,
   arg: TPayload,
