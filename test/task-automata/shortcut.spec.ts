@@ -21,7 +21,7 @@ describe("Shortcut Test", () => {
   test("On Process Completed", () => {
     return promise.then(() => {
       const currentState = store.getState();
-      expect(currentState.result?.message).toBe("Expected Message"); // this should remaing the same.
+      expect(currentState.result?.message).toBe("Expected Message"); // this should remain the same.
     });
   });
 });

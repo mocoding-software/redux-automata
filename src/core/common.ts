@@ -14,7 +14,7 @@ export const ACTION_TYPE_PREFIX = "@@AUTOMATA";
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type ActionPayload = any;
 
-export type IsInvokableFunction = <TState>(state: AutomataState<TState>) => boolean;
+export type IsInvocableFunction = <TState>(state: AutomataState<TState>) => boolean;
 
 /**
  * Generic action class that contains type and payload.
@@ -36,7 +36,7 @@ export interface AutomataAction<TPayload extends ActionPayload = void> extends P
  */
 export interface ActionDefinition<TPayload extends ActionPayload = void> {
   actionType: string;
-  isInvokable: IsInvokableFunction;
+  isInvocable: IsInvocableFunction;
   (payload: TPayload): PayloadAction<TPayload>;
 }
 
@@ -54,18 +54,10 @@ export interface StateDefinition<TState, TPayload extends ActionPayload = void> 
 
 /**
  * Local store with own getState and Dispatch methods.
- * IMPORTANT: Since version 3.0 `extends Redux.Dispatch<any>` will be removed.
  */
 export interface LocalStore<TState, TAction extends PayloadAction = Redux.AnyAction> extends Redux.Dispatch<TAction> {
   dispatch: Redux.Dispatch<TAction>;
   getState: () => TState;
-}
-
-/**
- * Typed Reducer method aka extends Redux.Reducer<TState>
- */
-export interface StateDefinition<TState, TPayload extends ActionPayload = void> extends TypedReducer<TState, TPayload> {
-  stateName: string;
 }
 
 export type TransitionMethod<TState, TPayload extends ActionPayload = void> = (

@@ -8,7 +8,7 @@ import {
   StateFluentOptions,
   StateMachineOptions,
   TypedReducer,
-  IsInvokableFunction,
+  IsInvocableFunction,
 } from "./common";
 import { Arc, Edge, Node, StateOptions } from "./options";
 
@@ -84,9 +84,9 @@ export class Automata<TState> implements StateMachineOptions<TState> {
       return action;
     };
 
-    const isInvokable: IsInvokableFunction = (state) => this.hasTransition(state.__sm_state || "", actionType);
+    const isInvocable: IsInvocableFunction = (state) => this.hasTransition(state.__sm_state || "", actionType);
 
-    return Object.assign(func, { actionType, isInvokable });
+    return Object.assign(func, { actionType, isInvocable });
   }
 
   public getGraph(): Node<TState, ActionPayload>[] {

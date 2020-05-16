@@ -16,9 +16,9 @@
 
 redux-automata - is a Finite State Machine implementation for Redux store. It allows developer to generate Redux reducer automatically based on FST graph object. 
 The library was developed to support the following scenarios:
-* Provide different behavoiur for the same action depending on current state
-* Ignore specific actions while in specific states (or better saying - process actions only in specific states)
-* Use declarative approach for defining actions, states and transitions instead of switch-case and if-then-else
+* Provide different behavior in response to the same action depending on a current state
+* Ignore specific actions while in specific states (or better say - react on actions only in specific states)
+* Use declarative approach for defining actions, states and transitions instead of switch-case and if-then-else statements
 
 ## Installation
 
@@ -56,11 +56,12 @@ The following example is written on Typescript:
 import * as Redux from "redux";
 import { Automata, automataReducer } from 'redux-automata';
 
-export interface State{
-    message: string;
+// define the store
+export interface StoreState {
+  message: string;
 }
 
-const automata = new Automata<State>("Counter");
+const automata = new Automata<StoreState>("Counter");
 
 // define states
 const Off = automata.state("Off", () => ({ message: "Switched Off" }));
@@ -69,30 +70,30 @@ const On = automata.state("On", () => ({ message: "Switched On" }));
 // define actions
 const Toggle = automata.action("Toggle");
 
-// configure state machine
+// configure FST: Off => On and On => Off on Toggle
 automata
-    .in(Off)
-        .on(Toggle)
-            .goTo(On)
-    .in(On)
-        .on(Toggle)
-            .goTo(Off);
+  .in(Off)
+    .on(Toggle)
+      .goTo(On)
+  .in(On)
+    .on(Toggle)
+      .goTo(Off);
 
+// define initial state
 automata.beginWith(Off);
 
+// generate reducer
 const reducer = automataReducer(automata);
 export {
-    reducer,
-    Toggle
+  reducer, // use it in combineReducers
+  Toggle //use it in dispatch
 }
 ```
 
-In this simple example we configured a state machine with two states and one action. 
-The action will lrad to different behaviour depending on current state.
 The similar functionality could be achieved by writing the following reducer:
 
 ```typescript
-interface State{
+interface StoreState {
     type: string;
     message: string;
 }
@@ -124,29 +125,25 @@ const reducer = (state = initialState, action) =>{
 }
 
 const Toggle = { type: "Toggle" }
-
-export {
-    reducer,
-    Toggle
-}
 ```
 
-## Implemenation & Usage Details
+## Details
 
-The library defines each state as seperate reducer function that accepts typed argument. The typed argument is dfined by action that leads to that states. 
+The library defines each state as separate reducer function that accepts typed payload argument.  This payload argument should be of the same type that is defined by action that leads to that state. 
 
-Redux Automata allows configuring state and actions in declrative way. 
+Redux Automata allows configuring state and actions in declarative way. 
 Every state is a reducer function that will be executed on entry. 
-Every action is a function that returns action with ```type``` and ```payload```. 
+Every action is a function that returns action with `type` and `payload`. 
 
 ### Creating States
-Defining the state is absolutely the same on how reducer is defined.
+State function is similar to reducer function.
 
 ```typescript
-    (state: TState, arg?: TAction): TState;
+    // definition
+    (state: TState, arg?: TAction): TState;   
 ```
 
-In addition to that you have to specify friendly name for the state. Name should be unique within automata.
+In addition to that there is an ability to specify friendly name for the state. Name should be unique within automata.
 
 #### Examples
 
@@ -167,7 +164,7 @@ In addition to that you have to specify friendly name for the state. Name should
 ```
 
 ### Creating Actions
-Defining action is simlified to define action name (type) and strongly typed argument that is expected to receive as a ```payload```. 
+Defining action is simplified to the point of defining action name (`action type`) and strongly typed argument that is expected to receive as a `payload`. 
 
 #### Examples
 
@@ -179,63 +176,55 @@ Defining action is simlified to define action name (type) and strongly typed arg
 ```
 
 ### Creating Transitions
-Transition is a function that executed when switching from one state to another. 
-Main purpose of transitions is to execute async operations. 
+Transition is a function that executed when automata switches from one state to another. 
+Async operation is very good representation of what transition is.
 Here is a good example of fetching data from server:
 
 <img src="https://github.com/mocoding-software/redux-automata/raw/master/examples/res/fetch.png" width="50%" />
 
 ```typescript
 
-...
+// ...
 
 const FetchData = (localStore) =>
     apiClient.MakeRequestToServer()
         .then(_ => localStore.dispatch(RequestSucceeded(_))
         .catch(_ => localStore.dispatch(RequestFailed(_)));
 
-...
+// ...
 
 automata
-    .in(Idle)
-        .on(Fetch)
-            .execute(FetchData) // <-- transition
-            .goTo(Fetching)
-    .in(Fetching)
-        .on(RequestSucceeded)
-            .goTo(Fetched)
-        .on(RequestFailed)
-            .goTo(FetchingFailed)
+  .in(Idle)
+    .on(Fetch)
+      .execute(FetchData) // <-- transition
+      .goTo(Fetching)
+  .in(Fetching)
+    .on(RequestSucceeded)
+      .goTo(Fetched)
+    .on(RequestFailed)
+      .goTo(FetchingFailed)
 ```
 
-FetchData function will be executed right after automata switched to Fetching state. 
+`FetchData` function will be executed right after automata switched to `Fetching` state. 
 Transitions may be defined using the following signature:
 
 ```typescript
     (dispatch: LocalStore<TState>, arg: TAction): void
-
 ```
 
-LocalStore is a dispatch function with two properties: ```dispatch``` and ```getState```:
+`LocalStore` is a dispatch function with two properties: ```dispatch``` and ```getState```:
 ```typescript
-/**
- * Local store with own getState and Dispatch methods.
- * IMPORTANT: Since version 3.0 `extends Redux.Dispatch<any>` will be removed.
- */
-export interface LocalStore<TState> extends Redux.Dispatch<any> {
-    dispatch: Redux.Dispatch<any>;
-    getState: () => TState;
+export interface LocalStore<TState, TAction extends PayloadAction = Redux.AnyAction> extends Redux.Dispatch<TAction> {
+  dispatch: Redux.Dispatch<TAction>;
+  getState: () => TState;
 }
 ```
 
-```getState``` always returns current automata state. That makes possible to add additional data related conditions for transitions with async operations.
+`getState` always returns current automata state. That makes possible to add additional data related conditions for transitions with async operations.
 
 
 ### Check State Transitions
-Sometimes it is useful to know whenever certain actions are "enabled" for specific state. 
-Best use case to describe this scenario is to disable button during async request. 
-In example above automata is switched to Fetching State so it no longer respond to Fetch action.
-To access this functionality you may use `isInvokable` method on action and pass current state
+Sometimes it is useful to know whenever the action is "invocable" while automata is in specific state. Best use case to describe this scenario is to disable button during async request. In the example above automata is switched to `Fetching` state so it should no longer respond to `Fetch` action. To access this functionality you may use `isInvocable(state)` method on the action and pass current state.
 
 ```typescript
     
@@ -253,7 +242,7 @@ interface ViewProps {
 @connect(
     (state: ResponseState) => ({
         response: state,
-        canRefresh: Refresh.isInvokable(state)
+        canRefresh: Refresh.isInvocable(state)
     }),
     (dispatch: Redux.Dispatch<any>) => ({        
         refresh: () => dispatch(Refresh()),
@@ -264,11 +253,36 @@ interface ViewProps {
 
 ```
 
-Then Refresh button may be hidden depending on ```canRefresh``` flag.
+Then Refresh button may be hidden depending on `canRefresh` flag.
 
 ## Task Automation
 
-Along with ```Automata``` there is a ```TaskAutomata```. ```TaskAutomata``` is aimed to be used with common async operations like fetching data froms server.
+Along with `Automata` there is `TaskAutomata`. `TaskAutomata` is aimed to be used with common async operations like fetching data from server.
+
+FST Graph of TaskAutomata looks like this:
+```ts
+.in(state)
+  .on(Start)
+    .execute(BeginProcessing)
+    .goTo(Processing)
+.in(Processing)
+  .on(End)
+    .goTo(Completed)
+    .on(Fail)
+      .goTo(Failure)
+    .on(Cancel)
+      .goTo(Idle)
+.in(Failure)
+  .on(Cancel)
+    .goTo(Idle)
+.in(Completed)
+.or(Failure)
+  .on(Restart)
+    .execute(BeginProcessing)
+    .goTo(Processing);
+```
+
+Usage:
 
 ```ts
 
@@ -278,7 +292,7 @@ Along with ```Automata``` there is a ```TaskAutomata```. ```TaskAutomata``` is a
     }
 
     const automata = new TaskAutomata<Data>("Fetch Data", fetchDataFromServer);
-    automata.setupProcessIn(automata.Idle);
+    automata.setupProcessIn(automata.Idle); // configure all transitions starting in Idle
     automata.beginWith(automata.Idle);
 
     export const getDataReducer = automataReducer(automata);
@@ -311,6 +325,32 @@ Along with ```Automata``` there is a ```TaskAutomata```. ```TaskAutomata``` is a
 
 ```
 
+## Task Automation Shortcut
+
+While task automata provides flexibility to use, configure and extend basic set of transitions, `createTaskAutomation` function define a reusable shortcut:
+
+```ts
+import { createTaskAutomation, TaskState } from "redux-automata";
+
+// define store state
+export type ServerTimeState = TaskState<ServerTimeDto>;
+
+// define promise
+function getServerTime(): Promise<ServerTimeDto> {
+  const api = new ApiClient();
+  return api.serverTime();
+}
+
+// create automation
+const automation = createTaskAutomation<ServerTimeDto>("Get Server Time", getServerTime);
+
+const GetServerTime = automation.start; 
+const RefreshServerTime = automation.restart;
+const reducer = automation.reducer;
+
+export { reducer, GetServerTime, RefreshServerTime };
+```
+
 This will configure finite automation similar to image below:
 
 <img src="https://github.com/mocoding-software/redux-automata/raw/master/examples/res/task.png" width="50%" />
@@ -319,31 +359,36 @@ This will configure finite automation similar to image below:
 All examples code are located in ```examples``` folder
 
 Run Basic example:
-```bash
+```sh
 yarn
-yarn run basic
+yarn basic
 ```
 Run Async example:
-```bash
+```sh
 yarn
-yarn run async
+yarn async
 ```
 
 Every example static content is served from http://localhost:3000 with hot reload.
 
 ## Contributions
 
-All source code is located in ```src``` folder.
-All tests are located in ```test``` folder.
+All source code is located in `src` folder.
+All tests are located in `test` folder.
 
 Run build
-```bash
+```sh
 yarn build
 ```
 
 Run tests
-```bash
+```sh
 yarn test
+```
+
+Run lint
+```sh
+yarn lint
 ```
 
 ## Credits

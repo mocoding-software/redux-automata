@@ -77,13 +77,13 @@ describe("Conditional Transitions", () => {
     expect(currentState.processing).toBeTruthy();
   });
 
-  test("Is Invokable Test", () => {
+  test("Is Invocable Test", () => {
     store.dispatch(StartProcess());
 
     const state = store.getState().process;
     
-    expect(CancelProcess.isInvokable(state)).toBeTruthy()
-    expect(StartProcess.isInvokable(state)).toBeFalsy()
+    expect(CancelProcess.isInvocable(state)).toBeTruthy()
+    expect(StartProcess.isInvocable(state)).toBeFalsy()
   });
 
   test("Cancel Test", () => {
@@ -99,7 +99,7 @@ describe("Conditional Transitions", () => {
     return promise.then(() => {
       const currentState = store.getState().process;
       expect(currentState.__sm_state).toBe(Completed.stateName);
-      expect(currentState.value).toBe("Canceled"); // this should remaing the same.
+      expect(currentState.value).toBe("Canceled"); // this should remain the same.
     });
   });
 });

@@ -9,15 +9,15 @@
   "author": "MOCODING, LLC",
   "license": "MIT",
   "dependencies": {
-    "isomorphic-fetch": "^2.2.1",
-    "reactstrap": "^8.4.1",
     "bootstrap": "^4.4.1",
-    "react-graph-vis": "^1.0.5"
+    "isomorphic-fetch": "^2.2.1",
+    "react-graph-vis": "^1.0.5",
+    "reactstrap": "^8.4.1"
   },
   "devDependencies": {
-    "@types/reactstrap": "^8.4.2",
-    "@mocoding/react-app": "^1.0.0",
-    "@mocoding/react-app-router-redux": "^1.0.0"
+    "@mocoding/react-app": "^1.0.1",
+    "@mocoding/react-app-router-redux": "^1.0.1",
+    "@types/reactstrap": "^8.4.2"
   },
   "eslintConfig": {
     "extends": "@mocoding/eslint-config"
