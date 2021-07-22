@@ -7,7 +7,7 @@ export interface TaskAutomation<
   TResult,
   TInput = void,
   TError extends Error = Error,
-  TState extends TaskState<TResult, TError> = TaskState<TResult, TError>
+  TState extends TaskState<TResult, TError> = TaskState<TResult, TError>,
 > {
   reducer: Redux.Reducer<TState>;
   start: ActionDefinition<TInput>;
@@ -19,7 +19,7 @@ export function createTaskAutomation<
   TResult,
   TInput = void,
   TError extends Error = Error,
-  TState extends TaskState<TResult, TError> = TaskState<TResult, TError>
+  TState extends TaskState<TResult, TError> = TaskState<TResult, TError>,
 >(
   dataName: string,
   processTask: Task<TResult, TInput>,

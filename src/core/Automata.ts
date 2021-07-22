@@ -53,7 +53,6 @@ export class Automata<TState> implements StateMachineOptions<TState> {
     if (!existingState) throw new Error("State should be previously defined using this.state(...) method.");
 
     this.initial = Object.assign(state({} as TState, undefined), {
-      // eslint-disable-next-line @typescript-eslint/camelcase
       __sm_state: existingState.stateName,
     });
   }

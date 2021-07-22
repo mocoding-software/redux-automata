@@ -46,7 +46,7 @@ describe("Noop", () => {
   test("On Execute Test", () => {
     store.dispatch(UpdateMessage());
 
-    return new Promise((accept) => setTimeout(accept, 1)).then(() => {
+    return new Promise((accept) => setTimeout(accept, 1, undefined)).then(() => {
       const currentState = store.getState() as AutomataState<TestState>;
       expect(currentState.__sm_state).toBe(Active.stateName);
     });
