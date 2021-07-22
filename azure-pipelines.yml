@@ -104,7 +104,7 @@ stages:
                 - task: GitHubRelease@1
                   displayName: "Update GitHub release"
                   inputs:
-                    gitHubConnection: "mocoding-software"
+                    gitHubConnection: "github.com_offbeatful"
                     repositoryName: "mocoding-software/redux-automata"
                     action: edit
                     tag: "v$(Build.BuildNumber)"

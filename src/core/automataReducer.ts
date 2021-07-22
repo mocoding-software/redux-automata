@@ -1,6 +1,6 @@
 import * as Redux from "redux";
 import { Automata } from "./Automata";
-import { ACTION_TYPE_PREFIX, ActionPayload, AutomataState, LocalStore } from "./common";
+import { ACTION_TYPE_PREFIX, AutomataState, LocalStore } from "./common";
 
 export function automataReducer<TState>(automata: Automata<TState>): Redux.Reducer<TState> {
   if (automata.initial.__sm_state === undefined)
@@ -13,7 +13,7 @@ export function automataReducer<TState>(automata: Automata<TState>): Redux.Reduc
 
   if (!currentNode) throw new Error("Can't find initial state.");
 
-  return <TPayload extends ActionPayload>(state: AutomataState<TState> = automata.initial, action: Redux.AnyAction) => {
+  return (state: AutomataState<TState> = automata.initial, action: Redux.AnyAction) => {
     // skip if not state machine;
     if (typeof action.type !== "string" || !action.type.startsWith(ACTION_TYPE_PREFIX)) return state;
 
@@ -31,7 +31,6 @@ export function automataReducer<TState>(automata: Automata<TState>): Redux.Reduc
 
       automata.current = state;
       newState = nextNode.entry(state, action.payload);
-      // eslint-disable-next-line @typescript-eslint/camelcase
       newState.__sm_state = nextNode.entry.stateName;
       automata.current = newState;
     }

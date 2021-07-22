@@ -11,7 +11,8 @@ import { Arc, ArcCreator } from "./common";
 import { StateOptionsEx } from "./StateOptionsEx";
 
 export class ActionOptions<TState, TAction>
-  implements ActionFluentOptions<TState, TAction>, ArcCreator<TState, TAction> {
+  implements ActionFluentOptions<TState, TAction>, ArcCreator<TState, TAction>
+{
   private transitions: TransitionMethod<TState, TAction>[] = [];
   private targetState?: string;
 
